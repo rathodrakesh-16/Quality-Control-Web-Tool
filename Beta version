@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quality Control Tool</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/jfif" href="Logo.jpeg">
+    <style>
+        body {
+            font-family: 'Calibri', Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+        .sidebar {
+            width: 220px;
+            background-color: #1a2634;
+            padding: 20px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 0 12px 12px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: width 0.3s ease;
+        }
+        .sidebar .header {
+            color: #ffffff;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #2d3b4e, #1a2634);
+            padding: 12px 15px;
+            border-radius: 6px;
+        }
+        .sidebar button {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar button:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        .sidebar button.active {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .sidebar button i {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .sidebar .footer {
+            color: #ffffff;
+            font-size: 18px;
+            font-family: 'Calibri', sans-serif;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: white;
+            border-radius: 15px 0 0 15px;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+            border-radius: 8px 8px 0 0;
+        }
+        h1 {
+            font-size: 14px;
+            color: #333;
+            margin: 0;
+            font-family: 'Calibri', sans-serif;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .date-time {
+            color: #333;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0;
+            text-align: left;
+            height: 20px;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: center;
+            font-size: 14px;
+        }
+        input[type="text"] {
+            width: 100%;
+            height: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+        }
+        .clear-btn, .export-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: 'Calibri', sans-serif;
+            transition: background-color 0.3s ease;
+        }
+        .clear-btn {
+            background-color: #ffcccc;
+            color: #333;
+        }
+        .clear-btn:hover {
+            background-color: #ff9999;
+        }
+        .export-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        .export-btn:hover {
+            background-color: #2980b9;
+        }
+        .blank-sheet {
+            display: none;
+            padding: 0 20px 20px 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        /* Fixed widths for dataTable columns */
+        #dataTable th:nth-child(1) { width: 150px; }
+        #dataTable th:nth-child(2) { width: 100px; }
+        #dataTable th:nth-child(3) { width: 200px; }
+        #dataTable th:nth-child(4) { width: 100px; }
+        #dataTable th:nth-child(5) { width: 100px; }
+        #dataTable th:nth-child(6) { width: 150px; }
+        #dataTable th:nth-child(7) { width: 80px; }
+        #dataTable th:nth-child(8) { width: 120px; }
+        /* Fixed widths for dataTablePDM columns */
+        #dataTablePDM th:nth-child(1) { width: 100px; }
+        #dataTablePDM th:nth-child(2) { width: 150px; }
+        #dataTablePDM th:nth-child(3) { width: 200px; }
+        #dataTablePDM th:nth-child(4) { width: 100px; }
+        #dataTablePDM th:nth-child(5) { width: 120px; }
+        #dataTablePDM th:nth-child(6) { width: 120px; }
+        /* Fixed widths for classificationDetailsTable columns */
+        #classificationDetailsTable th:nth-child(1) { width: 100px; }
+        #classificationDetailsTable th:nth-child(2) { width: 150px; }
+        #classificationDetailsTable th:nth-child(3) { width: 100px; }
+        #classificationDetailsTable th:nth-child(4) { width: 150px; }
+        #classificationDetailsTable th:nth-child(5) { width: 100px; }
+        #classificationDetailsTable th:nth-child(6) { width: 200px; }
+        #classificationDetailsTable th:nth-child(7) { width: 100px; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <div class="header">Quality Control Tool</div>
+            <button onclick="showSheet('scraperData')">
+                <i class="fas fa-database"></i> Scraper Data (Classification)
+            </button>
+            <button onclick="showSheet('scraperDataPDM')">
+                <i class="fas fa-database"></i> Scraper Data (PDM)
+            </button>
+            <button onclick="showSheet('classificationDetails')">
+                <i class="fas fa-list"></i> Classification Details
+            </button>
+            <button onclick="showSheet('qcReport')">
+                <i class="fas fa-file-alt"></i> QC Report
+            </button>
+            <button onclick="showSheet('tools')">
+                <i class="fas fa-tools"></i> Tools
+            </button>
+            <button onclick="showSheet('pulldataBackup')">
+                <i class="fas fa-archive"></i> Pulldata (Backup)
+            </button>
+        </div>
+        <div class="footer">Technosoft Engineering</div>
+    </div>
+
+    <div class="main-content">
+        <div id="scraperData" class="blank-sheet">
+            <div class="header-container">
+                <h1>Scraper Data (Classification)</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('dataTable')">Clear Data</button>
+                    <button class="export-btn" onclick="exportToCSV('dataTable')">Export to CSV</button>
+                    <div class="date-time" id="dateTimeScraperData"></div>
+                </div>
+            </div>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Heading Name</th>
+                        <th>Heading id</th>
+                        <th>Definition</th>
+                        <th>Family</th>
+                        <th>PDM NUM</th>
+                        <th>Link</th>
+                        <th>HOS</th>
+                        <th>Updated By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="scraperDataPDM" class="blank-sheet">
+            <div class="header-container">
+                <h1>Scraper Data (PDM)</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('dataTablePDM')">Clear Data</button>
+                    <button class="export-btn" onclick="exportToCSV('dataTablePDM')">Export to CSV</button>
+                    <div class="date-time" id="dateTimeScraperPDM"></div>
+                </div>
+            </div>
+            <table id="dataTablePDM">
+                <thead>
+                    <tr>
+                        <th>PDM NUM</th>
+                        <th>Summary</th>
+                        <th>PDM Text</th>
+                        <th>Heading Count</th>
+                        <th>Date</th>
+                        <th>Updated BY</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="classificationDetails" class="blank-sheet">
+            <div class="header-container">
+                <h1>Classification Details</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('classificationDetailsTable')">Clear Data</button>
+                    <button class="export-btn" onclick="exportToCSV('classificationDetailsTable')">Export to CSV</button>
+                    <div class="date-time" id="dateTimeClassification"></div>
+                </div>
+            </div>
+            <table id="classificationDetailsTable">
+                <thead>
+                    <tr>
+                        <th>Heading Id</th>
+                        <th>Heading Name</th>
+                        <th>Family</th>
+                        <th>Link</th>
+                        <th>PDM NUM</th>
+                        <th>PDM TEXT</th>
+                        <th>Heading Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="qcReport" class="blank-sheet">
+            <div class="header-container">
+                <h1>QC Report</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('qcReport')">Clear Data</button>
+                    <div class="date-time" id="dateTimeQCReport"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tools" class="blank-sheet">
+            <div class="header-container">
+                <h1>Tools</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('tools')">Clear Data</button>
+                    <div class="date-time" id="dateTimeTools"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pulldataBackup" class="blank-sheet">
+            <div class="header-container">
+                <h1>Pulldata (Backup)</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('pulldataBackup')">Clear Data</button>
+                    <div class="date-time" id="dateTimeBackup"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function formatHeadingId(headingId) {
+            let cleanNumber = headingId.replace(/ID:/g, '').replace(/[^0-9]/g, '');
+            return cleanNumber.padStart(8, '0');
+        }
+
+        function extractNumber(str) {
+            const match = str.match(/\d+/);
+            return match ? match[0] : '';
+        }
+
+        function syncToClassificationDetails() {
+            const scraperTable = document.getElementById('dataTable');
+            const classificationTable = document.getElementById('classificationDetailsTable');
+           
+            const scraperRows = scraperTable.getElementsByTagName('tbody')[0].rows;
+            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
+
+            for (let i = 0; i < Math.max(scraperRows.length, classificationRows.length); i++) {
+                if (i >= classificationRows.length) {
+                    addRow('classificationDetailsTable');
+                }
+               
+                const classificationRow = classificationTable.getElementsByTagName('tbody')[0].rows[i];
+               
+                if (i < scraperRows.length) {
+                    const scraperRow = scraperRows[i];
+                    const headingIdInput = scraperRow.cells[1].querySelector('input');
+                    const headingNameInput = scraperRow.cells[0].querySelector('input');
+                    const definitionInput = scraperRow.cells[2].querySelector('input');
+                    const familyInput = scraperRow.cells[3].querySelector('input');
+                    const pomNumInput = scraperRow.cells[4].querySelector('input');
+                    const linkInput = scraperRow.cells[5].querySelector('input');
+                   
+                    if (headingIdInput.value) {
+                        classificationRow.cells[0].querySelector('input').value = formatHeadingId(headingIdInput.value);
+                    }
+                    if (headingNameInput.value) {
+                        classificationRow.cells[1].querySelector('input').value = headingNameInput.value;
+                    }
+                    if (familyInput.value) {
+                        classificationRow.cells[2].querySelector('input').value = familyInput.value;
+                    }
+                    if (linkInput.value) {
+                        classificationRow.cells[3].querySelector('input').value = linkInput.value;
+                    }
+
+                    if (pomNumInput.value) {
+                        classificationRow.cells[4].querySelector('input').value = pomNumInput.value;
+                    } else if (definitionInput.value) {
+                        const numberFromDefinition = extractNumber(definitionInput.value);
+                        if (numberFromDefinition) {
+                            classificationRow.cells[4].querySelector('input').value = numberFromDefinition;
+                        }
+                    }
+                }
+            }
+            syncPDMText();
+        }
+
+        function syncPDMText() {
+            const pdmTable = document.getElementById('dataTablePDM');
+            const classificationTable = document.getElementById('classificationDetailsTable');
+            
+            const pdmRows = pdmTable.getElementsByTagName('tbody')[0].rows;
+            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
+
+            for (let i = 0; i < classificationRows.length; i++) {
+                const classificationRow = classificationRows[i];
+                const pdmNumInput = classificationRow.cells[4].querySelector('input');
+                const pdmTextInput = classificationRow.cells[5].querySelector('input');
+                const pdmNumValue = pdmNumInput.value.trim();
+
+                if (!pdmNumValue) {
+                    pdmTextInput.value = '';
+                    continue;
+                }
+
+                if (isNaN(pdmNumValue)) {
+                    pdmTextInput.value = 'This Heading does not have PDM';
+                    continue;
+                }
+
+                let found = false;
+                for (let j = 0; j < pdmRows.length; j++) {
+                    const pdmRow = pdmRows[j];
+                    const pdmNumSource = pdmRow.cells[0].querySelector('input').value.trim();
+                    const pdmTextSource = pdmRow.cells[2].querySelector('input').value;
+
+                    if (pdmNumValue.toLowerCase() === pdmNumSource.toLowerCase()) {
+                        pdmTextInput.value = pdmTextSource;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    pdmTextInput.value = 'This PDM number does not have PDM text in Library';
+                }
+            }
+        }
+
+        function addRow(tableId) {
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+
+            let columns;
+            if (tableId === 'dataTable') {
+                columns = [
+                    'headingName', 'headingId', 'definition', 'family', 'pomNum', 'link', 'hos', 'updatedBy'
+                ];
+            } else if (tableId === 'dataTablePDM') {
+                columns = [
+                    'pomNum', 'summary', 'pomText', 'headingCount', 'date', 'updatedBy'
+                ];
+            } else if (tableId === 'classificationDetailsTable') {
+                columns = [
+                    'headingId', 'headingName', 'family', 'link', 'pdmNum', 'pdmText', 'headingType'
+                ];
+            }
+
+            columns.forEach(col => {
+                const newCell = newRow.insertCell();
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = col;
+                newCell.appendChild(input);
+            });
+
+            if (tableId === 'dataTable') {
+                syncToClassificationDetails();
+            }
+            if (tableId === 'classificationDetailsTable') {
+                syncPDMText();
+            }
+        }
+
+        function clearSheet(tableId) {
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            table.innerHTML = '';
+            for (let i = 0; i < 15; i++) {
+                addRow(tableId);
+            }
+        }
+
+        function exportToCSV(tableId) {
+            const table = document.getElementById(tableId);
+            const rows = table.querySelectorAll('tbody tr');
+            const csv = [];
+            rows.forEach(row => {
+                const rowData = [];
+                row.querySelectorAll('input').forEach(input => rowData.push(input.value));
+                csv.push(rowData.join(','));
+            });
+            const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `${tableId}.csv`);
+            document.body.appendChild(link);
+            link.click();
+        }
+
+        function handlePaste(event, tableId) {
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            const clipboardData = event.clipboardData || window.clipboardData;
+            const pastedData = clipboardData.getData('text');
+
+            const rows = pastedData.split('\n').map(row => row.split('\t'));
+            const startCell = event.target.closest('td');
+            const startRow = startCell.parentElement;
+            const startRowIndex = Array.from(startRow.parentElement.children).indexOf(startRow);
+            const startCellIndex = Array.from(startRow.children).indexOf(startCell);
+
+            rows.forEach((row, rowIndex) => {
+                let currentRow = table.rows[startRowIndex + rowIndex];
+                if (!currentRow) {
+                    addRow(tableId);
+                    currentRow = table.rows[startRowIndex + rowIndex];
+                }
+                row.forEach((cellData, cellIndex) => {
+                    const currentCell = currentRow.cells[startCellIndex + cellIndex];
+                    if (currentCell) {
+                        const input = currentCell.querySelector('input');
+                        if (input) {
+                            input.value = cellData;
+                        }
+                    }
+                });
+            });
+
+            if (tableId === 'dataTable') {
+                syncToClassificationDetails();
+            }
+            if (tableId === 'classificationDetailsTable') {
+                syncPDMText();
+            }
+
+            event.preventDefault();
+        }
+
+        document.getElementById('dataTable').addEventListener('paste', (event) => handlePaste(event, 'dataTable'));
+        document.getElementById('dataTablePDM').addEventListener('paste', (event) => handlePaste(event, 'dataTablePDM'));
+        document.getElementById('classificationDetailsTable').addEventListener('paste', (event) => handlePaste(event, 'classificationDetailsTable'));
+
+        function showSheet(sheetId) {
+            const sheets = document.querySelectorAll('.blank-sheet');
+            sheets.forEach(sheet => sheet.style.display = 'none');
+            const selectedSheet = document.getElementById(sheetId);
+            if (selectedSheet) {
+                selectedSheet.style.display = 'block';
+            }
+            const buttons = document.querySelectorAll('.sidebar button');
+            buttons.forEach(button => button.classList.remove('active'));
+            const activeButton = document.querySelector(`.sidebar button[onclick="showSheet('${sheetId}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        function initializeTable() {
+            const table1 = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
+            const table2 = document.getElementById('dataTablePDM').getElementsByTagName('tbody')[0];
+            const table3 = document.getElementById('classificationDetailsTable').getElementsByTagName('tbody')[0];
+            for (let i = 0; i < 15; i++) {
+                addRow('dataTable');
+                addRow('dataTablePDM');
+                addRow('classificationDetailsTable');
+            }
+            syncPDMText();
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            const dateTimeString = now.toLocaleString('en-US', {
+                dateStyle: 'medium',
+                timeStyle: 'medium'
+            });
+            document.getElementById('dateTimeScraperData').textContent = dateTimeString;
+            document.getElementById('dateTimeScraperPDM').textContent = dateTimeString;
+            document.getElementById('dateTimeClassification').textContent = dateTimeString;
+            document.getElementById('dateTimeQCReport').textContent = dateTimeString;
+            document.getElementById('dateTimeTools').textContent = dateTimeString;
+            document.getElementById('dateTimeBackup').textContent = dateTimeString;
+        }
+
+        window.onload = function() {
+            initializeTable();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        };
+    </script>
+</body>
+</html>
