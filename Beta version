@@ -112,7 +112,7 @@
             justify-content: space-between; /* Space between title and right-aligned elements */
             align-items: center; /* Vertically centers items */
             margin-bottom: 20px; /* Space below the header */
-            padding: 10px 20px; /* Internal padding */
+            padding: 10px 50px; /* Internal padding */
             background-color: #f9f9f9; /* Light gray background */
             border-bottom: 1px solid #ddd; /* Light border at the bottom */
             border-radius: 8px 8px 0 0; /* Rounded corners at top */
@@ -143,7 +143,8 @@
         /* Table styles: General table design for data display */
         table {
             width: 100%; /* Full width of container */
-            border-collapse: collapse; /* Removes space between table cells */
+            border-collapse: separate; /* Changed to separate for border-spacing */
+            border-spacing: 0 3px; /* Maintains 3px vertical spacing between rows for boundaries and padding */
             margin: 20px 0; /* Vertical margin */
             font-size: 14px; /* Font size for readability */
             font-family: 'Calibri', sans-serif; /* Matches body font */
@@ -154,7 +155,9 @@
             border: 1px solid #ddd; /* Light gray border */
             padding: 0; /* No internal padding (handled by inputs) */
             text-align: left; /* Left-aligned text */
-            height: 20px; /* Fixed height for consistency */
+            height: 20px; /* Fixed height for consistency, same for both sections */
+            line-height: 20px; /* Ensures consistent height for text and inputs */
+            box-sizing: border-box; /* Ensures padding and border are included in height */
         }
 
         /* Table header styles: Bold headers with centered text */
@@ -167,14 +170,29 @@
 
         /* Input field styles: For editable table cells */
         input[type="text"] {
-            width: 100%; /* Full width of cell */
-            height: 100%; /* Full height of cell */
+            width: 100%; /* Full width of cell (unchanged) */
+            height: 100%; /* Full height of cell, ensuring same height as output (20px) */
             padding: 4px; /* Internal padding */
             box-sizing: border-box; /* Includes padding in width/height calculations */
             border: none; /* No border */
             outline: none; /* No outline on focus */
             font-size: 14px; /* Font size for readability */
             font-family: 'Calibri', sans-serif; /* Matches body font */
+            line-height: 12px; /* Adjusts line height to fit within 20px height */
+        }
+
+        /* Output cell text styling to match input height (empty by default) */
+        .output-cell {
+            width: 100%; /* Full width of cell (unchanged) */
+            height: 100%; /* Full height of cell, ensuring same height as input (20px) */
+            padding: 4px; /* Internal padding to match input */
+            box-sizing: border-box; /* Ensures padding and border are included in height */
+            font-size: 14px; /* Font size for readability */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
+            line-height: 12px; /* Adjusts line height to fit within 20px height */
+            white-space: nowrap; /* Prevents text wrapping */
+            overflow: hidden; /* Hides overflow text */
+            text-overflow: ellipsis; /* Adds ellipsis for overflow */
         }
 
         /* Clear and Export button styles: Action buttons in headers */
@@ -188,26 +206,26 @@
             transition: background-color 0.3s ease; /* Smooth background color transition */
         }
 
-        /* Clear button specific styles */
+        /* Clear button specific styles (darker background) */
         .clear-btn {
-            background-color: #ffcccc; /* Light red background */
+            background-color: #e66b6b; /* Darker red background */
             color: #333; /* Dark gray text */
         }
 
         /* Clear button hover state */
         .clear-btn:hover {
-            background-color: #ff9999; /* Darker red on hover */
+            background-color: #cc5555; /* Even darker red on hover */
         }
 
-        /* Export button specific styles */
+        /* Export button specific styles (darker background) */
         .export-btn {
-            background-color: #3498db; /* Blue background */
+            background-color: #1e6ba8; /* Darker blue background */
             color: white; /* White text for contrast */
         }
 
         /* Export button hover state */
         .export-btn:hover {
-            background-color: #2980b9; /* Darker blue on hover */
+            background-color: #1a5a8d; /* Even darker blue on hover */
         }
 
         /* Blank sheet styles: Hidden content sections */
@@ -217,6 +235,89 @@
             border: 1px solid #ddd; /* Light gray border */
             border-radius: 8px; /* Rounded corners */
             background-color: #f9f9f9; /* Light gray background */
+        }
+
+        /* Tools-specific section styles: Container for three columns */
+        .tools-container {
+            display: flex; /* Uses flexbox for horizontal layout */
+            justify-content: space-between; /* Distributes columns evenly */
+            gap: 20px; /* Space between columns */
+            margin-top: 20px; /* Space above the columns */
+        }
+
+        /* Tools-specific section styles for each column */
+        .tools-section {
+            padding: 15px; /* Internal padding for each section */
+            border: 1px solid #ddd; /* Light gray border for separation */
+            border-radius: 8px; /* Rounded corners to match design */
+            background-color: white; /* White background for contrast */
+            min-width: 0; /* Prevents overflow */
+        }
+
+        /* Input and Output sections width: Same width, each 50% of container width (accounting for gap) */
+        .tools-section.input,
+        .tools-section.output {
+            flex: 2.375; /* Each takes approximately 50% of container width (adjusted for 20px gap, totaling ~100% with buttons) */
+        }
+
+        /* Plain cell styling for input and output tables with slight curve (identical for both) */
+        .tools-section.input table td,
+        .tools-section.output table td {
+            background-color: #ffffff; /* Plain white background */
+            border: 1px solid #ddd; /* Standard light gray border */
+            border-radius: 4px; /* Slight curve for modern look */
+            padding: 4px; /* Internal padding for consistency */
+            margin-bottom: 3px; /* Maintains reduced padding/boundary between cells */
+        }
+
+        /* Input field styling within input cells */
+        .tools-section.input input[type="text"] {
+            background: transparent; /* Transparent background to show plain white */
+            border: none; /* No border */
+            outline: none; /* No outline on focus */
+            width: 100%; /* Full width of cell (unchanged) */
+            height: 100%; /* Full height of cell, ensuring same height as output (20px) */
+            font-size: 14px; /* Font size for readability */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
+            line-height: 12px; /* Adjusts line height to fit within 20px height */
+        }
+
+        /* Buttons section width: Narrower, just enough to fit smaller blue buttons with proper alignment */
+        .tools-section.buttons {
+            flex: 0.5; /* Reduced width, approximately 12.5% of container width or less (unchanged) */
+            display: flex; /* Uses flexbox for vertical and horizontal centering */
+            justify-content: center; /* Centers buttons horizontally */
+            align-items: center; /* Centers buttons vertically */
+            padding: 20px; /* Maintains top padding for alignment and spacing */
+        }
+
+        /* Tool button styles: Matches the image style for buttons in Tools section, smaller size, only blue color */
+        .tool-btn {
+            display: block; /* Stacks buttons vertically */
+            margin: 10px 0; /* Vertical spacing between buttons */
+            padding: 5px 10px; /* Reduced internal padding for smaller size (unchanged) */
+            width: 120px; /* Reduced width for smaller buttons (unchanged) */
+            height: 30px; /* Reduced height for smaller buttons (unchanged) */
+            background-color: #f0f0f0; /* Light gray base as default */
+            color: #000000; /* Black text as default */
+            border: 1px solid #ccc; /* Light gray border */
+            border-radius: 4px; /* Slight rounding for modern look */
+            cursor: pointer; /* Hand cursor on hover */
+            font-size: 12px; /* Smaller font size for readability */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
+            text-align: center; /* Centers text in button */
+            transition: background-color 0.3s ease; /* Smooth hover transition */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Reduced shadow for smaller buttons */
+        }
+
+        /* Blue button styles for all buttons */
+        .tool-btn {
+            background-color: #4a90e2; /* Blue base color */
+            color: white; /* White text for contrast */
+        }
+
+        .tool-btn:hover {
+            background-color: #357abd; /* Darker blue on hover */
         }
 
         /* Fixed column widths for data tables */
@@ -234,7 +335,7 @@
         #dataTablePDM th:nth-child(1) { width: 100px; } /* PDM NUM column */
         #dataTablePDM th:nth-child(2) { width: 150px; } /* Summary column */
         #dataTablePDM th:nth-child(3) { width: 200px; } /* PDM Text column */
-        #dataTablePDM th:nth-child(4) { width: 100px; } /* Heading Count column */
+        #dataTablePDM th:nth-child(4) { word-break: break-all; width: 100px; } /* Heading Count column */
         #dataTablePDM th:nth-child(5) { width: 120px; } /* Date column */
         #dataTablePDM th:nth-child(6) { width: 120px; } /* Updated BY column */
 
@@ -375,13 +476,80 @@
             </div>
         </div>
 
-        <!-- Tools section: Placeholder for tool-related content -->
+        <!-- Tools section: Interactive page with identical plain, curved Excel-like input and output (15 empty output cells), and properly aligned blue task buttons in columns -->
         <div id="tools" class="blank-sheet">
             <div class="header-container">
                 <h1>Tools</h1>
                 <div class="header-right">
-                    <button class="clear-btn" onclick="clearSheet('tools')">Clear Data</button>
+                    <button class="export-btn" onclick="exportToCSV('tools')">Export to CSV</button>
                     <div class="date-time" id="dateTimeTools"></div>
+                </div>
+            </div>
+            <div class="tools-container">
+                <!-- Input Section: Plain, curved Excel-like table for user input (50% of container width, left column) -->
+                <div class="tools-section input">
+                    <table id="toolInputTable">
+                        <thead>
+                            <tr>
+                                <th>Input Cell</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><input type="text" class="input-cell" name="input1"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input2"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input3"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input4"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input5"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input6"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input7"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input8"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input9"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input10"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input11"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input12"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input13"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input14"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input15"></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Output Section: Plain, curved Excel-like table for displaying results (50% of container width, middle column, empty by default) -->
+                <div class="tools-section output">
+                    <table id="toolOutputTable">
+                        <thead>
+                            <tr>
+                                <th>Output Cell</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                            <tr><td class="output-cell"></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Buttons Section: Smaller, blue buttons properly aligned (Narrower column, just wide enough to fit buttons) -->
+                <div class="tools-section buttons">
+                    <div style="padding-top: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                        <button class="tool-btn" onclick="spacingCheck()">Spacing Check</button>
+                        <button class="tool-btn" onclick="removeSpace()">Remove Space</button>
+                        <button class="tool-btn" onclick="wordCounter()">Word Counter</button>
+                        <button class="tool-btn" onclick="clearToolData()">Clear Data</button>
+                        <button class="tool-btn" onclick="linkCheck()">Link Check</button>
+                        <button class="tool-btn" onclick="duplicatePDM()">Duplicate PDM</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -550,7 +718,14 @@
             const csv = []; // Initialize array for CSV data
             rows.forEach(row => { // Process each row
                 const rowData = []; // Initialize array for row data
-                row.querySelectorAll('input').forEach(input => rowData.push(input.value)); // Collect input values
+                if (tableId === 'tools') {
+                    // For tools, collect only input values from toolInputTable
+                    const inputCells = document.querySelectorAll('#toolInputTable input');
+                    inputCells.forEach(input => rowData.push(input.value || ''));
+                } else {
+                    // For other tables, collect input values as before
+                    row.querySelectorAll('input').forEach(input => rowData.push(input.value));
+                }
                 csv.push(rowData.join(',')); // Join values with commas and add to CSV
             });
             const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n'); // Create CSV content
@@ -633,6 +808,86 @@
                 addRow('classificationDetailsTable'); // Add rows to Classification Details
             }
             syncPDMText(); // Synchronize PDM text after initialization
+        }
+
+        // Tools-specific functions
+        function spacingCheck() {
+            const inputs = document.querySelectorAll('.input-cell');
+            const outputs = document.querySelectorAll('.output-cell');
+            inputs.forEach((input, index) => {
+                const value = input.value.trim();
+                let output = '';
+                if (value.includes('  ')) {
+                    output = 'Contains extra spaces!';
+                } else {
+                    output = 'No extra spaces.';
+                }
+                outputs[index].textContent = output;
+            });
+        }
+
+        function removeSpace() {
+            const inputs = document.querySelectorAll('.input-cell');
+            const outputs = document.querySelectorAll('.output-cell');
+            inputs.forEach((input, index) => {
+                const value = input.value.trim().replace(/\s+/g, ' ');
+                outputs[index].textContent = value || '';
+                input.value = value; // Update input to reflect removed spaces
+            });
+        }
+
+        function wordCounter() {
+            const inputs = document.querySelectorAll('.input-cell');
+            const outputs = document.querySelectorAll('.output-cell');
+            inputs.forEach((input, index) => {
+                const value = input.value.trim();
+                let output = '';
+                if (value) {
+                    const words = value.split(/\s+/).filter(word => word.length > 0);
+                    output = `${words.length} word${words.length !== 1 ? 's' : ''}.`;
+                }
+                outputs[index].textContent = output;
+            });
+        }
+
+        function clearToolData() {
+            const inputs = document.querySelectorAll('.input-cell');
+            const outputs = document.querySelectorAll('.output-cell');
+            inputs.forEach(input => input.value = '');
+            outputs.forEach(output => output.textContent = '');
+        }
+
+        function linkCheck() {
+            const inputs = document.querySelectorAll('.input-cell');
+            const outputs = document.querySelectorAll('.output-cell');
+            const urlRegex = /^(https?:\/\/[^\s]+)$/i;
+            inputs.forEach((input, index) => {
+                const value = input.value.trim();
+                let output = '';
+                if (urlRegex.test(value)) {
+                    output = 'Valid URL!';
+                } else if (value) {
+                    output = 'Not a valid URL.';
+                }
+                outputs[index].textContent = output;
+            });
+        }
+
+        function duplicatePDM() {
+            const inputs = document.querySelectorAll('.input-cell');
+            const values = Array.from(inputs).map(input => input.value.trim().toLowerCase());
+            const duplicates = values.filter((item, index) => values.indexOf(item) !== index && item);
+            const outputs = document.querySelectorAll('.output-cell');
+            inputs.forEach((input, index) => {
+                const value = input.value.trim();
+                let output = '';
+                if (duplicates.includes(value.toLowerCase()) && value) {
+                    output = 'Duplicate PDM found!';
+                } else if (value) {
+                    output = 'No duplicate PDM.';
+                }
+                outputs[index].textContent = output;
+            });
         }
 
         // Updates and displays the current date and time on each page
