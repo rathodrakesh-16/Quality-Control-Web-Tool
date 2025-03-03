@@ -1,204 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quality Control Tool</title>
-    <!-- FontAwesome for Icons -->
+    <!-- Document metadata -->
+    <meta charset="UTF-8"> <!-- Specifies character encoding for the document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures responsive viewport for mobile devices -->
+    <title>Quality Control Tool</title> <!-- Sets the title of the webpage, displayed in browser tabs -->
+
+    <!-- External resources -->
+    <!-- FontAwesome for Icons: Links to FontAwesome CDN for using icons in the UI -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Favicon -->
+    <!-- Favicon: Sets the webpage icon (Logo.jpeg) displayed in browser tabs -->
     <link rel="icon" type="image/jfif" href="Logo.jpeg">
+
     <style>
+        /* Global styles for the body */
         body {
-            font-family: 'Calibri', Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            background-color: #f9f9f9;
+            font-family: 'Calibri', Arial, sans-serif; /* Default font family for the document */
+            margin: 0; /* Removes default margin */
+            display: flex; /* Uses flexbox for layout */
+            height: 100vh; /* Full viewport height */
+            background-color: #f9f9f9; /* Light gray background for the body */
         }
+
+        /* Sidebar styles: Left navigation panel */
         .sidebar {
-            width: 220px;
-            background-color: #1a2634;
-            padding: 20px;
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
-            border-radius: 0 12px 12px 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: width 0.3s ease;
+            width: 220px; /* Width of the sidebar */
+            background-color: #1a2634; /* Dark blue background for modern look */
+            padding: 20px; /* Internal spacing */
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2); /* Shadow for depth on the right side */
+            border-radius: 0 12px 12px 0; /* Rounded corners on the right side */
+            display: flex; /* Uses flexbox for internal layout */
+            flex-direction: column; /* Stacks children vertically */
+            justify-content: space-between; /* Distributes space between header, buttons, and footer */
+            transition: width 0.3s ease; /* Smooth transition for width changes */
         }
+
+        /* Sidebar header styles: Top text in sidebar */
         .sidebar .header {
-            color: #ffffff;
-            font-size: 14px;
-            font-family: 'Calibri', sans-serif;
-            text-align: center;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #2d3b4e, #1a2634);
-            padding: 12px 15px;
-            border-radius: 6px;
+            color: #ffffff; /* White text for contrast */
+            font-size: 14px; /* Font size for readability */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
+            text-align: center; /* Centers the text */
+            margin-bottom: 20px; /* Space below the header */
+            background: linear-gradient(135deg, #2d3b4e, #1a2634); /* Gradient background for visual appeal */
+            padding: 12px 15px; /* Internal padding */
+            border-radius: 6px; /* Rounded corners for a modern look */
         }
+
+        /* Sidebar button styles: Navigation buttons */
         .sidebar button {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 14px;
-            font-family: 'Calibri', sans-serif;
-            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex; /* Uses flexbox for icon and text alignment */
+            align-items: center; /* Centers items vertically */
+            width: 100%; /* Full width of sidebar */
+            padding: 12px 15px; /* Internal padding */
+            margin-bottom: 15px; /* Spacing between buttons */
+            background: linear-gradient(135deg, #3b82f6, #2563eb); /* Blue gradient background */
+            color: white; /* White text for contrast */
+            border: none; /* No border */
+            border-radius: 6px; /* Rounded corners */
+            cursor: pointer; /* Hand cursor on hover */
+            text-align: left; /* Left-aligned text */
+            font-size: 14px; /* Font size for readability */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
         }
+
+        /* Sidebar button hover styles: Changes on mouse hover */
         .sidebar button:hover {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            transform: translateX(5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8); /* Darker blue gradient on hover */
+            transform: translateX(5px); /* Slight horizontal shift for interaction feedback */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
         }
+
+        /* Sidebar button active state: When button is selected */
         .sidebar button.active {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #22c55e, #16a34a); /* Green gradient for active state */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Stronger shadow for emphasis */
         }
+
+        /* Icon styling within sidebar buttons */
         .sidebar button i {
-            margin-right: 10px;
-            font-size: 16px;
+            margin-right: 10px; /* Space between icon and text */
+            font-size: 16px; /* Size of FontAwesome icons */
         }
+
+        /* Sidebar footer styles: Bottom text in sidebar */
         .sidebar .footer {
-            color: #ffffff;
-            font-size: 18px;
-            font-family: 'Calibri', sans-serif;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 20px;
-            letter-spacing: 1px;
+            color: #ffffff; /* White text for contrast */
+            font-size: 18px; /* Larger font for prominence */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
+            font-weight: bold; /* Bold for emphasis */
+            text-align: center; /* Centers the text */
+            margin-top: 20px; /* Space above the footer */
+            letter-spacing: 1px; /* Slight spacing for visual appeal */
         }
+
+        /* Main content area styles: Right section of the page */
         .main-content {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background-color: white;
-            border-radius: 15px 0 0 15px;
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1; /* Takes remaining space after sidebar */
+            padding: 20px; /* Internal spacing */
+            overflow-y: auto; /* Enables vertical scrolling if content overflows */
+            background-color: white; /* White background */
+            border-radius: 15px 0 0 15px; /* Rounded corners on left side */
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1); /* Shadow for depth on left side */
         }
+
+        /* Header container styles: Top section of each content page */
         .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #ddd;
-            border-radius: 8px 8px 0 0;
+            display: flex; /* Uses flexbox for layout */
+            justify-content: space-between; /* Space between title and right-aligned elements */
+            align-items: center; /* Vertically centers items */
+            margin-bottom: 20px; /* Space below the header */
+            padding: 10px 20px; /* Internal padding */
+            background-color: #f9f9f9; /* Light gray background */
+            border-bottom: 1px solid #ddd; /* Light border at the bottom */
+            border-radius: 8px 8px 0 0; /* Rounded corners at top */
         }
+
+        /* Page title styles: Heading for each content section */
         h1 {
-            font-size: 14px;
-            color: #333;
-            margin: 0;
-            font-family: 'Calibri', sans-serif;
+            font-size: 14px; /* Font size for readability */
+            color: #333; /* Dark gray text */
+            margin: 0; /* Removes default margin */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
         }
+
+        /* Header right section styles: Buttons and date-time on the right */
         .header-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; /* Uses flexbox for layout */
+            align-items: center; /* Vertically centers items */
+            gap: 10px; /* Space between elements */
         }
+
+        /* Date-time display styles: Shows current date and time */
         .date-time {
-            color: #333;
-            font-size: 14px;
-            font-family: 'Calibri', sans-serif;
+            color: #333; /* Dark gray text */
+            font-size: 14px; /* Font size for readability */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
         }
+
+        /* Table styles: General table design for data display */
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 14px;
-            font-family: 'Calibri', sans-serif;
+            width: 100%; /* Full width of container */
+            border-collapse: collapse; /* Removes space between table cells */
+            margin: 20px 0; /* Vertical margin */
+            font-size: 14px; /* Font size for readability */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
         }
+
+        /* Table header and cell styles */
         th, td {
-            border: 1px solid #ddd;
-            padding: 0;
-            text-align: left;
-            height: 20px;
+            border: 1px solid #ddd; /* Light gray border */
+            padding: 0; /* No internal padding (handled by inputs) */
+            text-align: left; /* Left-aligned text */
+            height: 20px; /* Fixed height for consistency */
         }
+
+        /* Table header styles: Bold headers with centered text */
         th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-            text-align: center;
-            font-size: 14px;
+            background-color: #f2f2f2; /* Light gray background */
+            font-weight: bold; /* Bold text for headers */
+            text-align: center; /* Centered text */
+            font-size: 14px; /* Font size for readability */
         }
+
+        /* Input field styles: For editable table cells */
         input[type="text"] {
-            width: 100%;
-            height: 100%;
-            padding: 4px;
-            box-sizing: border-box;
-            border: none;
-            outline: none;
-            font-size: 14px;
-            font-family: 'Calibri', sans-serif;
+            width: 100%; /* Full width of cell */
+            height: 100%; /* Full height of cell */
+            padding: 4px; /* Internal padding */
+            box-sizing: border-box; /* Includes padding in width/height calculations */
+            border: none; /* No border */
+            outline: none; /* No outline on focus */
+            font-size: 14px; /* Font size for readability */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
         }
+
+        /* Clear and Export button styles: Action buttons in headers */
         .clear-btn, .export-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 12px;
-            font-family: 'Calibri', sans-serif;
-            transition: background-color 0.3s ease;
+            padding: 5px 10px; /* Internal padding */
+            border: none; /* No border */
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer; /* Hand cursor on hover */
+            font-size: 12px; /* Smaller font for buttons */
+            font-family: 'Calibri', sans-serif; /* Matches body font */
+            transition: background-color 0.3s ease; /* Smooth background color transition */
         }
+
+        /* Clear button specific styles */
         .clear-btn {
-            background-color: #ffcccc;
-            color: #333;
+            background-color: #ffcccc; /* Light red background */
+            color: #333; /* Dark gray text */
         }
+
+        /* Clear button hover state */
         .clear-btn:hover {
-            background-color: #ff9999;
+            background-color: #ff9999; /* Darker red on hover */
         }
+
+        /* Export button specific styles */
         .export-btn {
-            background-color: #3498db;
-            color: white;
+            background-color: #3498db; /* Blue background */
+            color: white; /* White text for contrast */
         }
+
+        /* Export button hover state */
         .export-btn:hover {
-            background-color: #2980b9;
+            background-color: #2980b9; /* Darker blue on hover */
         }
+
+        /* Blank sheet styles: Hidden content sections */
         .blank-sheet {
-            display: none;
-            padding: 0 20px 20px 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f9f9f9;
+            display: none; /* Hidden by default until selected */
+            padding: 0 20px 20px 20px; /* Internal padding (top padding is 0 for header) */
+            border: 1px solid #ddd; /* Light gray border */
+            border-radius: 8px; /* Rounded corners */
+            background-color: #f9f9f9; /* Light gray background */
         }
-        /* Fixed widths for dataTable columns */
-        #dataTable th:nth-child(1) { width: 150px; }
-        #dataTable th:nth-child(2) { width: 100px; }
-        #dataTable th:nth-child(3) { width: 200px; }
-        #dataTable th:nth-child(4) { width: 100px; }
-        #dataTable th:nth-child(5) { width: 100px; }
-        #dataTable th:nth-child(6) { width: 150px; }
-        #dataTable th:nth-child(7) { width: 80px; }
-        #dataTable th:nth-child(8) { width: 120px; }
-        /* Fixed widths for dataTablePDM columns */
-        #dataTablePDM th:nth-child(1) { width: 100px; }
-        #dataTablePDM th:nth-child(2) { width: 150px; }
-        #dataTablePDM th:nth-child(3) { width: 200px; }
-        #dataTablePDM th:nth-child(4) { width: 100px; }
-        #dataTablePDM th:nth-child(5) { width: 120px; }
-        #dataTablePDM th:nth-child(6) { width: 120px; }
-        /* Fixed widths for classificationDetailsTable columns */
-        #classificationDetailsTable th:nth-child(1) { width: 100px; }
-        #classificationDetailsTable th:nth-child(2) { width: 150px; }
-        #classificationDetailsTable th:nth-child(3) { width: 100px; }
-        #classificationDetailsTable th:nth-child(4) { width: 150px; }
-        #classificationDetailsTable th:nth-child(5) { width: 100px; }
-        #classificationDetailsTable th:nth-child(6) { width: 200px; }
-        #classificationDetailsTable th:nth-child(7) { width: 100px; }
+
+        /* Fixed column widths for data tables */
+        /* DataTable column widths */
+        #dataTable th:nth-child(1) { width: 150px; } /* Heading Name column */
+        #dataTable th:nth-child(2) { width: 100px; } /* Heading ID column */
+        #dataTable th:nth-child(3) { width: 200px; } /* Definition column */
+        #dataTable th:nth-child(4) { width: 100px; } /* Family column */
+        #dataTable th:nth-child(5) { width: 100px; } /* PDM NUM column */
+        #dataTable th:nth-child(6) { width: 150px; } /* Link column */
+        #dataTable th:nth-child(7) { width: 80px; } /* HOS column */
+        #dataTable th:nth-child(8) { width: 120px; } /* Updated By column */
+
+        /* DataTablePDM column widths */
+        #dataTablePDM th:nth-child(1) { width: 100px; } /* PDM NUM column */
+        #dataTablePDM th:nth-child(2) { width: 150px; } /* Summary column */
+        #dataTablePDM th:nth-child(3) { width: 200px; } /* PDM Text column */
+        #dataTablePDM th:nth-child(4) { width: 100px; } /* Heading Count column */
+        #dataTablePDM th:nth-child(5) { width: 120px; } /* Date column */
+        #dataTablePDM th:nth-child(6) { width: 120px; } /* Updated BY column */
+
+        /* ClassificationDetailsTable column widths */
+        #classificationDetailsTable th:nth-child(1) { width: 100px; } /* Heading ID column */
+        #classificationDetailsTable th:nth-child(2) { width: 150px; } /* Heading Name column */
+        #classificationDetailsTable th:nth-child(3) { width: 100px; } /* Family column */
+        #classificationDetailsTable th:nth-child(4) { width: 150px; } /* Link column */
+        #classificationDetailsTable th:nth-child(5) { width: 100px; } /* PDM NUM column */
+        #classificationDetailsTable th:nth-child(6) { width: 200px; } /* PDM TEXT column */
+        #classificationDetailsTable th:nth-child(7) { width: 100px; } /* Heading Type column */
     </style>
 </head>
 <body>
+    <!-- Sidebar: Left navigation panel containing menu options -->
     <div class="sidebar">
         <div>
+            <!-- Sidebar header: Title at the top of the sidebar -->
             <div class="header">Quality Control Tool</div>
+            <!-- Navigation buttons: Each button links to a different content section -->
             <button onclick="showSheet('scraperData')">
                 <i class="fas fa-database"></i> Scraper Data (Classification)
             </button>
@@ -218,10 +274,13 @@
                 <i class="fas fa-archive"></i> Pulldata (Backup)
             </button>
         </div>
+        <!-- Sidebar footer: Company name at the bottom of the sidebar -->
         <div class="footer">Technosoft Engineering</div>
     </div>
 
+    <!-- Main content: Right section displaying content based on sidebar selection -->
     <div class="main-content">
+        <!-- Scraper Data (Classification) section: Table for classification data -->
         <div id="scraperData" class="blank-sheet">
             <div class="header-container">
                 <h1>Scraper Data (Classification)</h1>
@@ -245,11 +304,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Rows will be added here dynamically -->
+                    <!-- Rows will be added here dynamically via JavaScript -->
                 </tbody>
             </table>
         </div>
 
+        <!-- Scraper Data (PDM) section: Table for PDM data -->
         <div id="scraperDataPDM" class="blank-sheet">
             <div class="header-container">
                 <h1>Scraper Data (PDM)</h1>
@@ -271,11 +331,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Rows will be added here dynamically -->
+                    <!-- Rows will be added here dynamically via JavaScript -->
                 </tbody>
             </table>
         </div>
 
+        <!-- Classification Details section: Table for detailed classification data -->
         <div id="classificationDetails" class="blank-sheet">
             <div class="header-container">
                 <h1>Classification Details</h1>
@@ -298,11 +359,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Rows will be added here dynamically -->
+                    <!-- Rows will be added here dynamically via JavaScript -->
                 </tbody>
             </table>
         </div>
 
+        <!-- QC Report section: Simple report page with minimal content -->
         <div id="qcReport" class="blank-sheet">
             <div class="header-container">
                 <h1>QC Report</h1>
@@ -313,6 +375,7 @@
             </div>
         </div>
 
+        <!-- Tools section: Placeholder for tool-related content -->
         <div id="tools" class="blank-sheet">
             <div class="header-container">
                 <h1>Tools</h1>
@@ -323,6 +386,7 @@
             </div>
         </div>
 
+        <!-- Pulldata (Backup) section: Backup data section -->
         <div id="pulldataBackup" class="blank-sheet">
             <div class="header-container">
                 <h1>Pulldata (Backup)</h1>
@@ -335,255 +399,262 @@
     </div>
 
     <script>
+        // Function to format heading IDs by removing non-numeric characters and padding with zeros
         function formatHeadingId(headingId) {
             let cleanNumber = headingId.replace(/ID:/g, '').replace(/[^0-9]/g, '');
             return cleanNumber.padStart(8, '0');
         }
 
+        // Function to extract the first number from a string
         function extractNumber(str) {
             const match = str.match(/\d+/);
             return match ? match[0] : '';
         }
 
+        // Synchronizes data from Scraper Data (Classification) to Classification Details
         function syncToClassificationDetails() {
-            const scraperTable = document.getElementById('dataTable');
-            const classificationTable = document.getElementById('classificationDetailsTable');
-           
-            const scraperRows = scraperTable.getElementsByTagName('tbody')[0].rows;
-            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
+            const scraperTable = document.getElementById('dataTable'); // Get Scraper Data table
+            const classificationTable = document.getElementById('classificationDetailsTable'); // Get Classification Details table
+            
+            const scraperRows = scraperTable.getElementsByTagName('tbody')[0].rows; // Get rows from Scraper Data
+            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows; // Get rows from Classification Details
 
             for (let i = 0; i < Math.max(scraperRows.length, classificationRows.length); i++) {
                 if (i >= classificationRows.length) {
-                    addRow('classificationDetailsTable');
+                    addRow('classificationDetailsTable'); // Add row if needed in Classification Details
                 }
-               
-                const classificationRow = classificationTable.getElementsByTagName('tbody')[0].rows[i];
-               
+                
+                const classificationRow = classificationTable.getElementsByTagName('tbody')[0].rows[i]; // Current Classification row
+                
                 if (i < scraperRows.length) {
-                    const scraperRow = scraperRows[i];
-                    const headingIdInput = scraperRow.cells[1].querySelector('input');
-                    const headingNameInput = scraperRow.cells[0].querySelector('input');
-                    const definitionInput = scraperRow.cells[2].querySelector('input');
-                    const familyInput = scraperRow.cells[3].querySelector('input');
-                    const pomNumInput = scraperRow.cells[4].querySelector('input');
-                    const linkInput = scraperRow.cells[5].querySelector('input');
-                   
+                    const scraperRow = scraperRows[i]; // Current Scraper row
+                    const headingIdInput = scraperRow.cells[1].querySelector('input'); // Heading ID input
+                    const headingNameInput = scraperRow.cells[0].querySelector('input'); // Heading Name input
+                    const definitionInput = scraperRow.cells[2].querySelector('input'); // Definition input
+                    const familyInput = scraperRow.cells[3].querySelector('input'); // Family input
+                    const pomNumInput = scraperRow.cells[4].querySelector('input'); // PDM NUM input
+                    const linkInput = scraperRow.cells[5].querySelector('input'); // Link input
+                    
                     if (headingIdInput.value) {
-                        classificationRow.cells[0].querySelector('input').value = formatHeadingId(headingIdInput.value);
+                        classificationRow.cells[0].querySelector('input').value = formatHeadingId(headingIdInput.value); // Format and set Heading ID
                     }
                     if (headingNameInput.value) {
-                        classificationRow.cells[1].querySelector('input').value = headingNameInput.value;
+                        classificationRow.cells[1].querySelector('input').value = headingNameInput.value; // Set Heading Name
                     }
                     if (familyInput.value) {
-                        classificationRow.cells[2].querySelector('input').value = familyInput.value;
+                        classificationRow.cells[2].querySelector('input').value = familyInput.value; // Set Family
                     }
                     if (linkInput.value) {
-                        classificationRow.cells[3].querySelector('input').value = linkInput.value;
+                        classificationRow.cells[3].querySelector('input').value = linkInput.value; // Set Link
                     }
 
                     if (pomNumInput.value) {
-                        classificationRow.cells[4].querySelector('input').value = pomNumInput.value;
+                        classificationRow.cells[4].querySelector('input').value = pomNumInput.value; // Set PDM NUM
                     } else if (definitionInput.value) {
-                        const numberFromDefinition = extractNumber(definitionInput.value);
+                        const numberFromDefinition = extractNumber(definitionInput.value); // Extract number from definition
                         if (numberFromDefinition) {
-                            classificationRow.cells[4].querySelector('input').value = numberFromDefinition;
+                            classificationRow.cells[4].querySelector('input').value = numberFromDefinition; // Set PDM NUM if found
                         }
                     }
                 }
             }
-            syncPDMText();
+            syncPDMText(); // Synchronize PDM text after updating classification details
         }
 
+        // Synchronizes PDM text from Scraper Data (PDM) to Classification Details
         function syncPDMText() {
-            const pdmTable = document.getElementById('dataTablePDM');
-            const classificationTable = document.getElementById('classificationDetailsTable');
+            const pdmTable = document.getElementById('dataTablePDM'); // Get Scraper Data (PDM) table
+            const classificationTable = document.getElementById('classificationDetailsTable'); // Get Classification Details table
             
-            const pdmRows = pdmTable.getElementsByTagName('tbody')[0].rows;
-            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
+            const pdmRows = pdmTable.getElementsByTagName('tbody')[0].rows; // Get rows from PDM Data
+            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows; // Get rows from Classification Details
 
             for (let i = 0; i < classificationRows.length; i++) {
-                const classificationRow = classificationRows[i];
-                const pdmNumInput = classificationRow.cells[4].querySelector('input');
-                const pdmTextInput = classificationRow.cells[5].querySelector('input');
-                const pdmNumValue = pdmNumInput.value.trim();
+                const classificationRow = classificationRows[i]; // Current Classification row
+                const pdmNumInput = classificationRow.cells[4].querySelector('input'); // PDM NUM input
+                const pdmTextInput = classificationRow.cells[5].querySelector('input'); // PDM TEXT input
+                const pdmNumValue = pdmNumInput.value.trim(); // Trimmed PDM number value
 
                 if (!pdmNumValue) {
-                    pdmTextInput.value = '';
+                    pdmTextInput.value = ''; // Clear PDM text if no PDM number
                     continue;
                 }
 
                 if (isNaN(pdmNumValue)) {
-                    pdmTextInput.value = 'This Heading does not have PDM';
+                    pdmTextInput.value = 'This Heading does not have PDM'; // Set message if PDM number is not numeric
                     continue;
                 }
 
                 let found = false;
                 for (let j = 0; j < pdmRows.length; j++) {
-                    const pdmRow = pdmRows[j];
-                    const pdmNumSource = pdmRow.cells[0].querySelector('input').value.trim();
-                    const pdmTextSource = pdmRow.cells[2].querySelector('input').value;
+                    const pdmRow = pdmRows[j]; // Current PDM row
+                    const pdmNumSource = pdmRow.cells[0].querySelector('input').value.trim(); // Trimmed PDM number from source
+                    const pdmTextSource = pdmRow.cells[2].querySelector('input').value; // PDM text from source
 
                     if (pdmNumValue.toLowerCase() === pdmNumSource.toLowerCase()) {
-                        pdmTextInput.value = pdmTextSource;
+                        pdmTextInput.value = pdmTextSource; // Set matching PDM text
                         found = true;
                         break;
                     }
                 }
 
                 if (!found) {
-                    pdmTextInput.value = 'This PDM number does not have PDM text in Library';
+                    pdmTextInput.value = 'This PDM number does not have PDM text in Library'; // Set message if no match found
                 }
             }
         }
 
+        // Adds a new row to the specified table
         function addRow(tableId) {
-            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-            const newRow = table.insertRow();
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0]; // Get tbody of the target table
+            const newRow = table.insertRow(); // Insert a new row
 
-            let columns;
+            let columns; // Define columns based on table type
             if (tableId === 'dataTable') {
-                columns = [
-                    'headingName', 'headingId', 'definition', 'family', 'pomNum', 'link', 'hos', 'updatedBy'
-                ];
+                columns = ['headingName', 'headingId', 'definition', 'family', 'pomNum', 'link', 'hos', 'updatedBy'];
             } else if (tableId === 'dataTablePDM') {
-                columns = [
-                    'pomNum', 'summary', 'pomText', 'headingCount', 'date', 'updatedBy'
-                ];
+                columns = ['pomNum', 'summary', 'pomText', 'headingCount', 'date', 'updatedBy'];
             } else if (tableId === 'classificationDetailsTable') {
-                columns = [
-                    'headingId', 'headingName', 'family', 'link', 'pdmNum', 'pdmText', 'headingType'
-                ];
+                columns = ['headingId', 'headingName', 'family', 'link', 'pdmNum', 'pdmText', 'headingType'];
             }
 
-            columns.forEach(col => {
-                const newCell = newRow.insertCell();
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.name = col;
-                newCell.appendChild(input);
+            columns.forEach(col => { // Add input fields for each column
+                const newCell = newRow.insertCell(); // Create a new cell
+                const input = document.createElement('input'); // Create input element
+                input.type = 'text'; // Set input type to text
+                input.name = col; // Set input name for identification
+                newCell.appendChild(input); // Add input to cell
             });
 
             if (tableId === 'dataTable') {
-                syncToClassificationDetails();
+                syncToClassificationDetails(); // Sync if adding to Scraper Data
             }
             if (tableId === 'classificationDetailsTable') {
-                syncPDMText();
+                syncPDMText(); // Sync PDM text if adding to Classification Details
             }
         }
 
+        // Clears all rows in the specified table and adds 15 empty rows
         function clearSheet(tableId) {
-            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-            table.innerHTML = '';
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0]; // Get tbody of the target table
+            table.innerHTML = ''; // Remove all existing rows
             for (let i = 0; i < 15; i++) {
-                addRow(tableId);
+                addRow(tableId); // Add 15 new empty rows
             }
         }
 
+        // Exports table data to CSV format and triggers download
         function exportToCSV(tableId) {
-            const table = document.getElementById(tableId);
-            const rows = table.querySelectorAll('tbody tr');
-            const csv = [];
-            rows.forEach(row => {
-                const rowData = [];
-                row.querySelectorAll('input').forEach(input => rowData.push(input.value));
-                csv.push(rowData.join(','));
+            const table = document.getElementById(tableId); // Get the target table
+            const rows = table.querySelectorAll('tbody tr'); // Get all rows in tbody
+            const csv = []; // Initialize array for CSV data
+            rows.forEach(row => { // Process each row
+                const rowData = []; // Initialize array for row data
+                row.querySelectorAll('input').forEach(input => rowData.push(input.value)); // Collect input values
+                csv.push(rowData.join(',')); // Join values with commas and add to CSV
             });
-            const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', `${tableId}.csv`);
-            document.body.appendChild(link);
-            link.click();
+            const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n'); // Create CSV content
+            const encodedUri = encodeURI(csvContent); // Encode URI for download
+            const link = document.createElement('a'); // Create download link
+            link.setAttribute('href', encodedUri); // Set href to CSV data
+            link.setAttribute('download', `${tableId}.csv`); // Set download filename
+            document.body.appendChild(link); // Add link to document
+            link.click(); // Trigger download
         }
 
+        // Handles paste events to populate table cells
         function handlePaste(event, tableId) {
-            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-            const clipboardData = event.clipboardData || window.clipboardData;
-            const pastedData = clipboardData.getData('text');
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0]; // Get tbody of the target table
+            const clipboardData = event.clipboardData || window.clipboardData; // Get clipboard data
+            const pastedData = clipboardData.getData('text'); // Get pasted text
 
-            const rows = pastedData.split('\n').map(row => row.split('\t'));
-            const startCell = event.target.closest('td');
-            const startRow = startCell.parentElement;
-            const startRowIndex = Array.from(startRow.parentElement.children).indexOf(startRow);
-            const startCellIndex = Array.from(startRow.children).indexOf(startCell);
+            const rows = pastedData.split('\n').map(row => row.split('\t')); // Split pasted data into rows and columns (tab-separated)
+            const startCell = event.target.closest('td'); // Find the cell where paste occurred
+            const startRow = startCell.parentElement; // Find the row of the start cell
+            const startRowIndex = Array.from(startRow.parentElement.children).indexOf(startRow); // Get row index
+            const startCellIndex = Array.from(startRow.children).indexOf(startCell); // Get cell index
 
-            rows.forEach((row, rowIndex) => {
-                let currentRow = table.rows[startRowIndex + rowIndex];
+            rows.forEach((row, rowIndex) => { // Process each pasted row
+                let currentRow = table.rows[startRowIndex + rowIndex]; // Get or create current row
                 if (!currentRow) {
-                    addRow(tableId);
-                    currentRow = table.rows[startRowIndex + rowIndex];
+                    addRow(tableId); // Add row if it doesn’t exist
+                    currentRow = table.rows[startRowIndex + rowIndex]; // Update current row reference
                 }
-                row.forEach((cellData, cellIndex) => {
-                    const currentCell = currentRow.cells[startCellIndex + cellIndex];
+                row.forEach((cellData, cellIndex) => { // Process each cell in the row
+                    const currentCell = currentRow.cells[startCellIndex + cellIndex]; // Get current cell
                     if (currentCell) {
-                        const input = currentCell.querySelector('input');
+                        const input = currentCell.querySelector('input'); // Get input in cell
                         if (input) {
-                            input.value = cellData;
+                            input.value = cellData; // Set input value to pasted data
                         }
                     }
                 });
             });
 
             if (tableId === 'dataTable') {
-                syncToClassificationDetails();
+                syncToClassificationDetails(); // Sync if pasting into Scraper Data
             }
             if (tableId === 'classificationDetailsTable') {
-                syncPDMText();
+                syncPDMText(); // Sync PDM text if pasting into Classification Details
             }
 
-            event.preventDefault();
+            event.preventDefault(); // Prevent default paste behavior
         }
 
+        // Add paste event listeners to tables for handling clipboard input
         document.getElementById('dataTable').addEventListener('paste', (event) => handlePaste(event, 'dataTable'));
         document.getElementById('dataTablePDM').addEventListener('paste', (event) => handlePaste(event, 'dataTablePDM'));
         document.getElementById('classificationDetailsTable').addEventListener('paste', (event) => handlePaste(event, 'classificationDetailsTable'));
 
+        // Shows the selected sheet and updates active button state
         function showSheet(sheetId) {
-            const sheets = document.querySelectorAll('.blank-sheet');
-            sheets.forEach(sheet => sheet.style.display = 'none');
-            const selectedSheet = document.getElementById(sheetId);
+            const sheets = document.querySelectorAll('.blank-sheet'); // Get all content sections
+            sheets.forEach(sheet => sheet.style.display = 'none'); // Hide all sections
+            const selectedSheet = document.getElementById(sheetId); // Get the selected section
             if (selectedSheet) {
-                selectedSheet.style.display = 'block';
+                selectedSheet.style.display = 'block'; // Show the selected section
             }
-            const buttons = document.querySelectorAll('.sidebar button');
-            buttons.forEach(button => button.classList.remove('active'));
-            const activeButton = document.querySelector(`.sidebar button[onclick="showSheet('${sheetId}')"]`);
+            const buttons = document.querySelectorAll('.sidebar button'); // Get all sidebar buttons
+            buttons.forEach(button => button.classList.remove('active')); // Remove active class from all buttons
+            const activeButton = document.querySelector(`.sidebar button[onclick="showSheet('${sheetId}')"]`); // Find the selected button
             if (activeButton) {
-                activeButton.classList.add('active');
+                activeButton.classList.add('active'); // Add active class to the selected button
             }
         }
 
+        // Initializes tables with 15 empty rows
         function initializeTable() {
-            const table1 = document.getElementById('dataTable').getElementsByTagName('tbody')[0];
-            const table2 = document.getElementById('dataTablePDM').getElementsByTagName('tbody')[0];
-            const table3 = document.getElementById('classificationDetailsTable').getElementsByTagName('tbody')[0];
+            const table1 = document.getElementById('dataTable').getElementsByTagName('tbody')[0]; // Get Scraper Data tbody
+            const table2 = document.getElementById('dataTablePDM').getElementsByTagName('tbody')[0]; // Get Scraper Data (PDM) tbody
+            const table3 = document.getElementById('classificationDetailsTable').getElementsByTagName('tbody')[0]; // Get Classification Details tbody
             for (let i = 0; i < 15; i++) {
-                addRow('dataTable');
-                addRow('dataTablePDM');
-                addRow('classificationDetailsTable');
+                addRow('dataTable'); // Add rows to Scraper Data
+                addRow('dataTablePDM'); // Add rows to Scraper Data (PDM)
+                addRow('classificationDetailsTable'); // Add rows to Classification Details
             }
-            syncPDMText();
+            syncPDMText(); // Synchronize PDM text after initialization
         }
 
+        // Updates and displays the current date and time on each page
         function updateDateTime() {
-            const now = new Date();
+            const now = new Date(); // Get current date and time
             const dateTimeString = now.toLocaleString('en-US', {
-                dateStyle: 'medium',
-                timeStyle: 'medium'
+                dateStyle: 'medium', // Formats date as "Mar 3, 2025"
+                timeStyle: 'medium' // Formats time as "10:30:45 AM"
             });
-            document.getElementById('dateTimeScraperData').textContent = dateTimeString;
-            document.getElementById('dateTimeScraperPDM').textContent = dateTimeString;
-            document.getElementById('dateTimeClassification').textContent = dateTimeString;
-            document.getElementById('dateTimeQCReport').textContent = dateTimeString;
-            document.getElementById('dateTimeTools').textContent = dateTimeString;
-            document.getElementById('dateTimeBackup').textContent = dateTimeString;
+            document.getElementById('dateTimeScraperData').textContent = dateTimeString; // Update Scraper Data date-time
+            document.getElementById('dateTimeScraperPDM').textContent = dateTimeString; // Update Scraper Data (PDM) date-time
+            document.getElementById('dateTimeClassification').textContent = dateTimeString; // Update Classification Details date-time
+            document.getElementById('dateTimeQCReport').textContent = dateTimeString; // Update QC Report date-time
+            document.getElementById('dateTimeTools').textContent = dateTimeString; // Update Tools date-time
+            document.getElementById('dateTimeBackup').textContent = dateTimeString; // Update Pulldata (Backup) date-time
         }
 
+        // Runs on page load to set up the application
         window.onload = function() {
-            initializeTable();
-            updateDateTime();
-            setInterval(updateDateTime, 1000);
+            initializeTable(); // Initialize tables with empty rows
+            updateDateTime(); // Set initial date and time
+            setInterval(updateDateTime, 1000); // Update date and time every second
         };
     </script>
 </body>
