@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quality Control Tool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" type="image/jfif" href="Logo.jpeg">
+    <link rel="icon" type="image/jfif" href="main.jfif">
 
     <style>
         body {
@@ -90,6 +90,7 @@
             background-color: white;
             border-radius: 15px 0 0 15px;
             box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            position: relative; /* Ensure default content can position absolutely within this */
         }
 
         .header-container {
@@ -215,6 +216,8 @@
             border: 1px solid #ddd;
             border-radius: 8px;
             background-color: #f9f9f9;
+            position: relative; /* Ensure sheets are above default content */
+            z-index: 5; /* Below default content's z-index of 10 */
         }
 
         .tools-container {
@@ -329,6 +332,47 @@
         #pulldataBackupTable th:nth-child(6) { width: 150px; }
         #pulldataBackupTable th:nth-child(7) { width: 80px; }
         #pulldataBackupTable th:nth-child(8) { width: 120px; }
+
+        .default-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            background-color: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .logo {
+            width: 150px; /* Adjust size as needed */
+            height: auto;
+            margin-bottom: 20px;
+            opacity: 0; /* Start hidden for animation */
+            animation: fadeIn 2s ease-in-out forwards;
+        }
+
+        .animated-text {
+            font-size: 36px;
+            font-family: 'Calibri', Arial, sans-serif;
+            color: #1a2634;
+            opacity: 0; /* Start hidden for animation */
+            animation: fadeIn 2s ease-in-out 0.5s forwards; /* Delay by 0.5s after logo */
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -342,10 +386,16 @@
             <button onclick="showSheet('qcReport')"><i class="fas fa-file-alt"></i> QC Report</button>
             <button onclick="showSheet('tools')"><i class="fas fa-tools"></i> Tools</button>
         </div>
-        <div class="footer">Technosoft Engineering</div>
+        <div class="footer">© Technosoft Engineering</div> <!-- Updated footer text -->
     </div>
 
     <div class="main-content">
+        <!-- New default content for animation -->
+        <div id="defaultContent" class="default-content">
+            <img src="main.jfif" alt="Technosoft Engineering Logo" class="logo">
+            <h2 class="animated-text">Technosoft Engineering</h2>
+        </div>
+
         <div id="scraperData" class="blank-sheet">
             <div class="header-container">
                 <h1>Scraper Data (Classification)</h1>
@@ -678,7 +728,7 @@
         function clearSheet(tableId) {
             const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
             table.innerHTML = '';
-            for (let i = 0; i < 20; i++) {  // Changed from 15 to 20 for specified tables, including toolTable
+            for (let i = 0; i < 20; i++) {  // Changed from 15 to 20 for all specified tables, including toolTable
                 if (tableId === 'toolTable') {
                     addToolRow();
                 } else if (['dataTable', 'dataTablePDM', 'classificationDetailsTable', 'pulldataBackupTable'].includes(tableId)) {
@@ -777,6 +827,10 @@
             const selectedSheet = document.getElementById(sheetId);
             if (selectedSheet) {
                 selectedSheet.style.display = 'block';
+            }
+            const defaultContent = document.getElementById('defaultContent');
+            if (defaultContent) {
+                defaultContent.style.display = 'none'; // Hide default content when a sheet is shown
             }
             const buttons = document.querySelectorAll('.sidebar button');
             buttons.forEach(button => button.classList.remove('active'));
@@ -905,6 +959,12 @@
             initializeTable();
             updateDateTime();
             setInterval(updateDateTime, 1000);
+            
+            // Show default content on load
+            const defaultContent = document.getElementById('defaultContent');
+            if (defaultContent) {
+                defaultContent.style.display = 'flex'; // Ensure default content is visible initially
+            }
         };
     </script>
 </body>
