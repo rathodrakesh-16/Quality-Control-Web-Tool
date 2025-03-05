@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quality Control Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="CSS/styles.css">
+    <link rel="icon" type="image/jfif" href="Images/main.jfif">
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <div class="header">Quality Control Tool</div>
+            <button onclick="showSheet('pulldataBackup')"><i class="fas fa-archive"></i> Pulldata (Backup)</button>
+            <button onclick="showSheet('scraperDataPDM')"><i class="fas fa-database"></i> Scraper Data (PDM)</button>
+            <button onclick="showSheet('scraperData')"><i class="fas fa-database"></i> Scraper Data (Classification)</button>
+            <button onclick="showSheet('classificationDetails')"><i class="fas fa-list"></i> Classification Details</button>
+            <button onclick="showSheet('qcReport')"><i class="fas fa-file-alt"></i> QC Report</button>
+            <button onclick="showSheet('tools')"><i class="fas fa-tools"></i> Tools</button>
+        </div>
+        <div class="footer">© Technosoft Engineering</div>
+    </div>
+
+    <div class="main-content">
+        <div id="defaultContent" class="default-content">
+            <img src="Images/main.jfif" alt="Technosoft Engineering Logo" class="logo">
+            <h2 class="animated-text">Technosoft Engineering</h2>
+        </div>
+
+        <div id="scraperData" class="blank-sheet">
+            <div class="header-container">
+                <h1>Scraper Data (Classification)</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('dataTable')">Clear Data</button>
+                    <button class="export-btn" onclick="exportToCSV('dataTable')">Export to CSV</button>
+                    <div class="date-time" id="dateTimeScraperData"></div>
+                </div>
+            </div>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Heading Name</th>
+                        <th>Heading id</th>
+                        <th>Definition</th>
+                        <th>Family</th>
+                        <th>PDM NUM</th>
+                        <th>Link</th>
+                        <th>HOS</th>
+                        <th>Updated By</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div id="scraperDataPDM" class="blank-sheet">
+            <div class="header-container">
+                <h1>Scraper Data (PDM)</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('dataTablePDM')">Clear Data</button>
+                    <button class="export-btn" onclick="exportToCSV('dataTablePDM')">Export to CSV</button>
+                    <div class="date-time" id="dateTimeScraperPDM"></div>
+                </div>
+            </div>
+            <table id="dataTablePDM">
+                <thead>
+                    <tr>
+                        <th>PDM NUM</th>
+                        <th>Summary</th>
+                        <th>PDM Text</th>
+                        <th>Heading Count</th>
+                        <th>Date</th>
+                        <th>Updated BY</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div id="classificationDetails" class="blank-sheet">
+            <div class="header-container">
+                <h1>Classification Details</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('classificationDetailsTable')">Clear Data</button>
+                    <button class="export-btn" onclick="exportToCSV('classificationDetailsTable')">Export to CSV</button>
+                    <div class="date-time" id="dateTimeClassification"></div>
+                </div>
+            </div>
+            <table id="classificationDetailsTable">
+                <thead>
+                    <tr>
+                        <th>Heading Id</th>
+                        <th>Heading Name</th>
+                        <th>Family</th>
+                        <th>Link</th>
+                        <th>PDM NUM</th>
+                        <th>PDM TEXT</th>
+                        <th>Heading Type</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div id="qcReport" class="blank-sheet">
+            <div class="header-container">
+                <h1>QC Report</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('qcReport')">Clear Data</button>
+                    <div class="date-time" id="dateTimeQCReport"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tools" class="blank-sheet">
+            <div class="header-container">
+                <h1>Tools</h1>
+                <div class="header-right">
+                    <button class="export-btn" onclick="exportToCSV('tools')">Export to CSV</button>
+                    <div class="date-time" id="dateTimeTools"></div>
+                </div>
+            </div>
+            <div class="tools-container">
+                <div class="tools-section input">
+                    <table id="toolTable">
+                        <thead>
+                            <tr>
+                                <th>Input Cell</th>
+                                <th>Output Cell</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><input type="text" class="input-cell" name="input1"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input2"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input3"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input4"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input5"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input6"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input7"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input8"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input9"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input10"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input11"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input12"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input13"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input14"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input15"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tools-section buttons">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <button class="tool-btn" onclick="spacingCheck()">Spacing Check</button>
+                        <button class="tool-btn" onclick="removeSpace()">Remove Space</button>
+                        <button class="tool-btn" onclick="wordCounter()">Word Counter</button>
+                        <button class="tool-btn" onclick="clearToolData()">Clear Data</button>
+                        <button class="tool-btn" onclick="linkCheck()">Link Check</button>
+                        <button class="tool-btn" onclick="duplicatePDM()">Duplicate PDM</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pulldataBackup" class="blank-sheet">
+            <div class="header-container">
+                <h1>Pulldata (Backup)</h1>
+                <div class="header-right">
+                    <button class="clear-btn" onclick="clearSheet('pulldataBackupTable')">Clear Data</button>
+                    <button class="export-btn" onclick="exportToCSV('pulldataBackupTable')">Export to CSV</button>
+                    <div class="date-time" id="dateTimeBackup"></div>
+                </div>
+            </div>
+            <table id="pulldataBackupTable">
+                <thead>
+                    <tr>
+                        <th>Heading Name</th>
+                        <th>Heading id</th>
+                        <th>Definition</th>
+                        <th>Family</th>
+                        <th>PDM NUM</th>
+                        <th>Link</th>
+                        <th>HOS</th>
+                        <th>Updated By</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="Javascript/script.js"></script>
+</body>
+</html>
