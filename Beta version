@@ -1,387 +1,351 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Document metadata -->
-    <meta charset="UTF-8"> <!-- Specifies character encoding for the document -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures responsive viewport for mobile devices -->
-    <title>Quality Control Tool</title> <!-- Sets the title of the webpage, displayed in browser tabs -->
-
-    <!-- External resources -->
-    <!-- FontAwesome for Icons: Links to FontAwesome CDN for using icons in the UI -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quality Control Tool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Favicon: Sets the webpage icon (Logo.jpeg) displayed in browser tabs -->
     <link rel="icon" type="image/jfif" href="Logo.jpeg">
 
     <style>
-        /* Global styles for the body */
         body {
-            font-family: 'Calibri', Arial, sans-serif; /* Default font family for the document */
-            margin: 0; /* Removes default margin */
-            display: flex; /* Uses flexbox for layout */
-            height: 100vh; /* Full viewport height */
-            background-color: #f9f9f9; /* Light gray background for the body */
+            font-family: 'Calibri', Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f9f9f9;
         }
 
-        /* Sidebar styles: Left navigation panel */
         .sidebar {
-            width: 220px; /* Width of the sidebar */
-            background-color: #1a2634; /* Dark blue background for modern look */
-            padding: 20px; /* Internal spacing */
-            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2); /* Shadow for depth on the right side */
-            border-radius: 0 12px 12px 0; /* Rounded corners on the right side */
-            display: flex; /* Uses flexbox for internal layout */
-            flex-direction: column; /* Stacks children vertically */
-            justify-content: space-between; /* Distributes space between header, buttons, and footer */
-            transition: width 0.3s ease; /* Smooth transition for width changes */
+            width: 220px;
+            background-color: #1a2634;
+            padding: 20px;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 0 12px 12px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: width 0.3s ease;
         }
 
-        /* Sidebar header styles: Top text in sidebar */
         .sidebar .header {
-            color: #ffffff; /* White text for contrast */
-            font-size: 14px; /* Font size for readability */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
-            text-align: center; /* Centers the text */
-            margin-bottom: 20px; /* Space below the header */
-            background: linear-gradient(135deg, #2d3b4e, #1a2634); /* Gradient background for visual appeal */
-            padding: 12px 15px; /* Internal padding */
-            border-radius: 6px; /* Rounded corners for a modern look */
+            color: #ffffff;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #2d3b4e, #1a2634);
+            padding: 12px 15px;
+            border-radius: 6px;
         }
 
-        /* Sidebar button styles: Navigation buttons */
         .sidebar button {
-            display: flex; /* Uses flexbox for icon and text alignment */
-            align-items: center; /* Centers items vertically */
-            width: 100%; /* Full width of sidebar */
-            padding: 12px 15px; /* Internal padding */
-            margin-bottom: 15px; /* Spacing between buttons */
-            background: linear-gradient(135deg, #3b82f6, #2563eb); /* Blue gradient background */
-            color: white; /* White text for contrast */
-            border: none; /* No border */
-            border-radius: 6px; /* Rounded corners */
-            cursor: pointer; /* Hand cursor on hover */
-            text-align: left; /* Left-aligned text */
-            font-size: 14px; /* Font size for readability */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
-            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Smooth transitions for hover effects */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+            transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        /* Sidebar button hover styles: Changes on mouse hover */
         .sidebar button:hover {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8); /* Darker blue gradient on hover */
-            transform: translateX(5px); /* Slight horizontal shift for interaction feedback */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-        /* Sidebar button active state: When button is selected */
         .sidebar button.active {
-            background: linear-gradient(135deg, #22c55e, #16a34a); /* Green gradient for active state */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Stronger shadow for emphasis */
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
 
-        /* Icon styling within sidebar buttons */
         .sidebar button i {
-            margin-right: 10px; /* Space between icon and text */
-            font-size: 16px; /* Size of FontAwesome icons */
+            margin-right: 10px;
+            font-size: 16px;
         }
 
-        /* Sidebar footer styles: Bottom text in sidebar */
         .sidebar .footer {
-            color: #ffffff; /* White text for contrast */
-            font-size: 18px; /* Larger font for prominence */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
-            font-weight: bold; /* Bold for emphasis */
-            text-align: center; /* Centers the text */
-            margin-top: 20px; /* Space above the footer */
-            letter-spacing: 1px; /* Slight spacing for visual appeal */
+            color: #ffffff;
+            font-size: 18px;
+            font-family: 'Calibri', sans-serif;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+            letter-spacing: 1px;
         }
 
-        /* Main content area styles: Right section of the page */
         .main-content {
-            flex: 1; /* Takes remaining space after sidebar */
-            padding: 20px; /* Internal spacing */
-            overflow-y: auto; /* Enables vertical scrolling if content overflows */
-            background-color: white; /* White background */
-            border-radius: 15px 0 0 15px; /* Rounded corners on left side */
-            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1); /* Shadow for depth on left side */
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: white;
+            border-radius: 15px 0 0 15px;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Header container styles: Top section of each content page */
         .header-container {
-            display: flex; /* Uses flexbox for layout */
-            justify-content: space-between; /* Space between title and right-aligned elements */
-            align-items: center; /* Vertically centers items */
-            margin-bottom: 20px; /* Space below the header */
-            padding: 10px 50px; /* Internal padding */
-            background-color: #f9f9f9; /* Light gray background */
-            border-bottom: 1px solid #ddd; /* Light border at the bottom */
-            border-radius: 8px 8px 0 0; /* Rounded corners at top */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 50px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+            border-radius: 8px 8px 0 0;
         }
 
-        /* Page title styles: Heading for each content section */
         h1 {
-            font-size: 14px; /* Font size for readability */
-            color: #333; /* Dark gray text */
-            margin: 0; /* Removes default margin */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
+            font-size: 14px;
+            color: #333;
+            margin: 0;
+            font-family: 'Calibri', sans-serif;
         }
 
-        /* Header right section styles: Buttons and date-time on the right */
         .header-right {
-            display: flex; /* Uses flexbox for layout */
-            align-items: center; /* Vertically centers items */
-            gap: 10px; /* Space between elements */
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* Date-time display styles: Shows current date and time */
         .date-time {
-            color: #333; /* Dark gray text */
-            font-size: 14px; /* Font size for readability */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
+            color: #333;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
         }
 
-        /* Table styles: General table design for data display */
         table {
-            width: 100%; /* Full width of container */
-            border-collapse: separate; /* Changed to separate for border-spacing */
-            border-spacing: 0 3px; /* Maintains 3px vertical spacing between rows for boundaries and padding */
-            margin: 20px 0; /* Vertical margin */
-            font-size: 14px; /* Font size for readability */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 1px;
+            margin: 20px 0;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
         }
 
-        /* Table header and cell styles */
         th, td {
-            border: 1px solid #ddd; /* Light gray border */
-            padding: 0; /* No internal padding (handled by inputs) */
-            text-align: left; /* Left-aligned text */
-            height: 20px; /* Fixed height for consistency, same for both sections */
-            line-height: 20px; /* Ensures consistent height for text and inputs */
-            box-sizing: border-box; /* Ensures padding and border are included in height */
+            border: 1px solid #ddd;
+            padding: 0;
+            text-align: left;
+            height: 20px;
+            line-height: 20px;
+            box-sizing: border-box;
         }
 
-        /* Table header styles: Bold headers with centered text */
         th {
-            background-color: #f2f2f2; /* Light gray background */
-            font-weight: bold; /* Bold text for headers */
-            text-align: center; /* Centered text */
-            font-size: 14px; /* Font size for readability */
+            background-color: #f2f2f2;
+            font-weight: bold;
+            text-align: center;
+            font-size: 14px;
         }
 
-        /* Input field styles: For editable table cells */
         input[type="text"] {
-            width: 100%; /* Full width of cell (unchanged) */
-            height: 100%; /* Full height of cell, ensuring same height as output (20px) */
-            padding: 4px; /* Internal padding */
-            box-sizing: border-box; /* Includes padding in width/height calculations */
-            border: none; /* No border */
-            outline: none; /* No outline on focus */
-            font-size: 14px; /* Font size for readability */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
-            line-height: 12px; /* Adjusts line height to fit within 20px height */
+            width: 100%;
+            height: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+            line-height: 12px;
+            transition: border 0.2s ease; /* Smooth transition for border */
         }
 
-        /* Output cell text styling to match input height (empty by default) */
+        input[type="text"]:focus {
+            border: 2px solid #6ea8fe; /* Lighter blue highlight */
+            padding: 2px; /* Adjust padding to account for thicker border */
+        }
+
         .output-cell {
-            width: 100%; /* Full width of cell (unchanged) */
-            height: 100%; /* Full height of cell, ensuring same height as input (20px) */
-            padding: 4px; /* Internal padding to match input */
-            box-sizing: border-box; /* Ensures padding and border are included in height */
-            font-size: 14px; /* Font size for readability */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
-            line-height: 12px; /* Adjusts line height to fit within 20px height */
-            white-space: nowrap; /* Prevents text wrapping */
-            overflow: hidden; /* Hides overflow text */
-            text-overflow: ellipsis; /* Adds ellipsis for overflow */
+            width: 100%;
+            height: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+            line-height: 12px;
+            transition: border 0.2s ease; /* Smooth transition for border */
         }
 
-        /* Clear and Export button styles: Action buttons in headers */
+        .output-cell:focus {
+            border: 2px solid #6ea8fe; /* Lighter blue highlight */
+            padding: 2px; /* Adjust padding to account for thicker border */
+        }
+
         .clear-btn, .export-btn {
-            padding: 5px 10px; /* Internal padding */
-            border: none; /* No border */
-            border-radius: 5px; /* Rounded corners */
-            cursor: pointer; /* Hand cursor on hover */
-            font-size: 12px; /* Smaller font for buttons */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
-            transition: background-color 0.3s ease; /* Smooth background color transition */
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: 'Calibri', sans-serif;
+            transition: background-color 0.3s ease;
         }
 
-        /* Clear button specific styles (darker background) */
         .clear-btn {
-            background-color: #e66b6b; /* Darker red background */
-            color: #333; /* Dark gray text */
+            background-color: #e66b6b;
+            color: #333;
         }
 
-        /* Clear button hover state */
         .clear-btn:hover {
-            background-color: #cc5555; /* Even darker red on hover */
+            background-color: #cc5555;
         }
 
-        /* Export button specific styles (darker background) */
         .export-btn {
-            background-color: #1e6ba8; /* Darker blue background */
-            color: white; /* White text for contrast */
+            background-color: #1e6ba8;
+            color: white;
         }
 
-        /* Export button hover state */
         .export-btn:hover {
-            background-color: #1a5a8d; /* Even darker blue on hover */
+            background-color: #1a5a8d;
         }
 
-        /* Blank sheet styles: Hidden content sections */
         .blank-sheet {
-            display: none; /* Hidden by default until selected */
-            padding: 0 20px 20px 20px; /* Internal padding (top padding is 0 for header) */
-            border: 1px solid #ddd; /* Light gray border */
-            border-radius: 8px; /* Rounded corners */
-            background-color: #f9f9f9; /* Light gray background */
+            display: none;
+            padding: 0 20px 20px 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
         }
 
-        /* Tools-specific section styles: Container for three columns */
         .tools-container {
-            display: flex; /* Uses flexbox for horizontal layout */
-            justify-content: space-between; /* Distributes columns evenly */
-            gap: 20px; /* Space between columns */
-            margin-top: 20px; /* Space above the columns */
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        /* Tools-specific section styles for each column */
         .tools-section {
-            padding: 15px; /* Internal padding for each section */
-            border: 1px solid #ddd; /* Light gray border for separation */
-            border-radius: 8px; /* Rounded corners to match design */
-            background-color: white; /* White background for contrast */
-            min-width: 0; /* Prevents overflow */
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            min-width: 0;
         }
 
-        /* Input and Output sections width: Same width, each 50% of container width (accounting for gap) */
-        .tools-section.input,
-        .tools-section.output {
-            flex: 2.375; /* Each takes approximately 50% of container width (adjusted for 20px gap, totaling ~100% with buttons) */
+        .tools-section.input {
+            flex: 4;
         }
 
-        /* Plain cell styling for input and output tables with slight curve (identical for both) */
-        .tools-section.input table td,
-        .tools-section.output table td {
-            background-color: #ffffff; /* Plain white background */
-            border: 1px solid #ddd; /* Standard light gray border */
-            border-radius: 4px; /* Slight curve for modern look */
-            padding: 4px; /* Internal padding for consistency */
-            margin-bottom: 3px; /* Maintains reduced padding/boundary between cells */
+        .tools-section.input table td {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px;
+            margin-bottom: 3px;
         }
 
-        /* Input field styling within input cells */
+        .tools-section.input table td.output-cell {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px;
+            margin-bottom: 3px;
+        }
+
         .tools-section.input input[type="text"] {
-            background: transparent; /* Transparent background to show plain white */
-            border: none; /* No border */
-            outline: none; /* No outline on focus */
-            width: 100%; /* Full width of cell (unchanged) */
-            height: 100%; /* Full height of cell, ensuring same height as output (20px) */
-            font-size: 14px; /* Font size for readability */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
-            line-height: 12px; /* Adjusts line height to fit within 20px height */
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            font-family: 'Calibri', sans-serif;
+            line-height: 12px;
         }
 
-        /* Buttons section width: Narrower, just enough to fit smaller blue buttons with proper alignment */
         .tools-section.buttons {
-            flex: 0.5; /* Reduced width, approximately 12.5% of container width or less (unchanged) */
-            display: flex; /* Uses flexbox for vertical and horizontal centering */
-            justify-content: center; /* Centers buttons horizontally */
-            align-items: center; /* Centers buttons vertically */
-            padding: 20px; /* Maintains top padding for alignment and spacing */
+            flex: 0.5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 15px;
         }
 
-        /* Tool button styles: Matches the image style for buttons in Tools section, smaller size, only blue color */
         .tool-btn {
-            display: block; /* Stacks buttons vertically */
-            margin: 10px 0; /* Vertical spacing between buttons */
-            padding: 5px 10px; /* Reduced internal padding for smaller size (unchanged) */
-            width: 120px; /* Reduced width for smaller buttons (unchanged) */
-            height: 30px; /* Reduced height for smaller buttons (unchanged) */
-            background-color: #f0f0f0; /* Light gray base as default */
-            color: #000000; /* Black text as default */
-            border: 1px solid #ccc; /* Light gray border */
-            border-radius: 4px; /* Slight rounding for modern look */
-            cursor: pointer; /* Hand cursor on hover */
-            font-size: 12px; /* Smaller font size for readability */
-            font-family: 'Calibri', sans-serif; /* Matches body font */
-            text-align: center; /* Centers text in button */
-            transition: background-color 0.3s ease; /* Smooth hover transition */
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Reduced shadow for smaller buttons */
-        }
-
-        /* Blue button styles for all buttons */
-        .tool-btn {
-            background-color: #4a90e2; /* Blue base color */
-            color: white; /* White text for contrast */
+            display: block;
+            margin: 10px 0;
+            padding: 5px 10px;
+            width: 120px;
+            height: 30px;
+            background-color: #1e6ba8; /* Same as export-btn */
+            color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px; /* Keeping the font size from previous request */
+            font-family: 'Calibri', sans-serif;
+            font-weight: 700; /* Keeping the bold weight from previous request */
+            text-align: center;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .tool-btn:hover {
-            background-color: #357abd; /* Darker blue on hover */
+            background-color: #1a5a8d; /* Same as export-btn hover */
         }
 
-        /* Fixed column widths for data tables */
-        /* DataTable column widths */
-        #dataTable th:nth-child(1) { width: 150px; } /* Heading Name column */
-        #dataTable th:nth-child(2) { width: 100px; } /* Heading ID column */
-        #dataTable th:nth-child(3) { width: 200px; } /* Definition column */
-        #dataTable th:nth-child(4) { width: 100px; } /* Family column */
-        #dataTable th:nth-child(5) { width: 100px; } /* PDM NUM column */
-        #dataTable th:nth-child(6) { width: 150px; } /* Link column */
-        #dataTable th:nth-child(7) { width: 80px; } /* HOS column */
-        #dataTable th:nth-child(8) { width: 120px; } /* Updated By column */
+        #dataTable th:nth-child(1) { width: 150px; }
+        #dataTable th:nth-child(2) { width: 100px; }
+        #dataTable th:nth-child(3) { width: 200px; }
+        #dataTable th:nth-child(4) { width: 100px; }
+        #dataTable th:nth-child(5) { width: 100px; }
+        #dataTable th:nth-child(6) { width: 150px; }
+        #dataTable th:nth-child(7) { width: 80px; }
+        #dataTable th:nth-child(8) { width: 120px; }
 
-        /* DataTablePDM column widths */
-        #dataTablePDM th:nth-child(1) { width: 100px; } /* PDM NUM column */
-        #dataTablePDM th:nth-child(2) { width: 150px; } /* Summary column */
-        #dataTablePDM th:nth-child(3) { width: 200px; } /* PDM Text column */
-        #dataTablePDM th:nth-child(4) { word-break: break-all; width: 100px; } /* Heading Count column */
-        #dataTablePDM th:nth-child(5) { width: 120px; } /* Date column */
-        #dataTablePDM th:nth-child(6) { width: 120px; } /* Updated BY column */
+        #dataTablePDM th:nth-child(1) { width: 100px; }
+        #dataTablePDM th:nth-child(2) { width: 150px; }
+        #dataTablePDM th:nth-child(3) { width: 200px; }
+        #dataTablePDM th:nth-child(4) { word-break: break-all; width: 100px; }
+        #dataTablePDM th:nth-child(5) { width: 120px; }
+        #dataTablePDM th:nth-child(6) { width: 120px; }
 
-        /* ClassificationDetailsTable column widths */
-        #classificationDetailsTable th:nth-child(1) { width: 100px; } /* Heading ID column */
-        #classificationDetailsTable th:nth-child(2) { width: 150px; } /* Heading Name column */
-        #classificationDetailsTable th:nth-child(3) { width: 100px; } /* Family column */
-        #classificationDetailsTable th:nth-child(4) { width: 150px; } /* Link column */
-        #classificationDetailsTable th:nth-child(5) { width: 100px; } /* PDM NUM column */
-        #classificationDetailsTable th:nth-child(6) { width: 200px; } /* PDM TEXT column */
-        #classificationDetailsTable th:nth-child(7) { width: 100px; } /* Heading Type column */
+        #classificationDetailsTable th:nth-child(1) { width: 100px; }
+        #classificationDetailsTable th:nth-child(2) { width: 150px; }
+        #classificationDetailsTable th:nth-child(3) { width: 100px; }
+        #classificationDetailsTable th:nth-child(4) { width: 150px; }
+        #classificationDetailsTable th:nth-child(5) { width: 100px; }
+        #classificationDetailsTable th:nth-child(6) { width: 200px; }
+        #classificationDetailsTable th:nth-child(7) { width: 100px; }
+
+        #toolTable th:nth-child(1) { width: 60%; }
+        #toolTable th:nth-child(2) { width: 48%; }
+
+        #pulldataBackupTable th:nth-child(1) { width: 150px; }
+        #pulldataBackupTable th:nth-child(2) { width: 100px; }
+        #pulldataBackupTable th:nth-child(3) { width: 200px; }
+        #pulldataBackupTable th:nth-child(4) { width: 100px; }
+        #pulldataBackupTable th:nth-child(5) { width: 100px; }
+        #pulldataBackupTable th:nth-child(6) { width: 150px; }
+        #pulldataBackupTable th:nth-child(7) { width: 80px; }
+        #pulldataBackupTable th:nth-child(8) { width: 120px; }
     </style>
 </head>
 <body>
-    <!-- Sidebar: Left navigation panel containing menu options -->
     <div class="sidebar">
         <div>
-            <!-- Sidebar header: Title at the top of the sidebar -->
             <div class="header">Quality Control Tool</div>
-            <!-- Navigation buttons: Each button links to a different content section -->
-            <button onclick="showSheet('scraperData')">
-                <i class="fas fa-database"></i> Scraper Data (Classification)
-            </button>
-            <button onclick="showSheet('scraperDataPDM')">
-                <i class="fas fa-database"></i> Scraper Data (PDM)
-            </button>
-            <button onclick="showSheet('classificationDetails')">
-                <i class="fas fa-list"></i> Classification Details
-            </button>
-            <button onclick="showSheet('qcReport')">
-                <i class="fas fa-file-alt"></i> QC Report
-            </button>
-            <button onclick="showSheet('tools')">
-                <i class="fas fa-tools"></i> Tools
-            </button>
-            <button onclick="showSheet('pulldataBackup')">
-                <i class="fas fa-archive"></i> Pulldata (Backup)
-            </button>
+            <button onclick="showSheet('pulldataBackup')"><i class="fas fa-archive"></i> Pulldata (Backup)</button>
+            <button onclick="showSheet('scraperDataPDM')"><i class="fas fa-database"></i> Scraper Data (PDM)</button>
+            <button onclick="showSheet('scraperData')"><i class="fas fa-database"></i> Scraper Data (Classification)</button>
+            <button onclick="showSheet('classificationDetails')"><i class="fas fa-list"></i> Classification Details</button>
+            <button onclick="showSheet('qcReport')"><i class="fas fa-file-alt"></i> QC Report</button>
+            <button onclick="showSheet('tools')"><i class="fas fa-tools"></i> Tools</button>
         </div>
-        <!-- Sidebar footer: Company name at the bottom of the sidebar -->
         <div class="footer">Technosoft Engineering</div>
     </div>
 
-    <!-- Main content: Right section displaying content based on sidebar selection -->
     <div class="main-content">
-        <!-- Scraper Data (Classification) section: Table for classification data -->
         <div id="scraperData" class="blank-sheet">
             <div class="header-container">
                 <h1>Scraper Data (Classification)</h1>
@@ -404,13 +368,10 @@
                         <th>Updated By</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Rows will be added here dynamically via JavaScript -->
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
 
-        <!-- Scraper Data (PDM) section: Table for PDM data -->
         <div id="scraperDataPDM" class="blank-sheet">
             <div class="header-container">
                 <h1>Scraper Data (PDM)</h1>
@@ -431,13 +392,10 @@
                         <th>Updated BY</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Rows will be added here dynamically via JavaScript -->
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
 
-        <!-- Classification Details section: Table for detailed classification data -->
         <div id="classificationDetails" class="blank-sheet">
             <div class="header-container">
                 <h1>Classification Details</h1>
@@ -459,13 +417,10 @@
                         <th>Heading Type</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Rows will be added here dynamically via JavaScript -->
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
 
-        <!-- QC Report section: Simple report page with minimal content -->
         <div id="qcReport" class="blank-sheet">
             <div class="header-container">
                 <h1>QC Report</h1>
@@ -476,7 +431,6 @@
             </div>
         </div>
 
-        <!-- Tools section: Interactive page with identical plain, curved Excel-like input and output (15 empty output cells), and properly aligned blue task buttons in columns -->
         <div id="tools" class="blank-sheet">
             <div class="header-container">
                 <h1>Tools</h1>
@@ -486,63 +440,35 @@
                 </div>
             </div>
             <div class="tools-container">
-                <!-- Input Section: Plain, curved Excel-like table for user input (50% of container width, left column) -->
                 <div class="tools-section input">
-                    <table id="toolInputTable">
+                    <table id="toolTable">
                         <thead>
                             <tr>
                                 <th>Input Cell</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td><input type="text" class="input-cell" name="input1"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input2"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input3"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input4"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input5"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input6"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input7"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input8"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input9"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input10"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input11"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input12"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input13"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input14"></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input15"></td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Output Section: Plain, curved Excel-like table for displaying results (50% of container width, middle column, empty by default) -->
-                <div class="tools-section output">
-                    <table id="toolOutputTable">
-                        <thead>
-                            <tr>
                                 <th>Output Cell</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
-                            <tr><td class="output-cell"></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input1"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input2"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input3"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input4"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input5"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input6"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input7"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input8"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input9"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input10"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input11"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input12"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input13"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input14"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <tr><td><input type="text" class="input-cell" name="input15"></td><td><input type="text" class="output-cell" readonly></td></tr>
                         </tbody>
                     </table>
                 </div>
-                <!-- Buttons Section: Smaller, blue buttons properly aligned (Narrower column, just wide enough to fit buttons) -->
                 <div class="tools-section buttons">
-                    <div style="padding-top: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%;">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
                         <button class="tool-btn" onclick="spacingCheck()">Spacing Check</button>
                         <button class="tool-btn" onclick="removeSpace()">Remove Space</button>
                         <button class="tool-btn" onclick="wordCounter()">Word Counter</button>
@@ -554,267 +480,331 @@
             </div>
         </div>
 
-        <!-- Pulldata (Backup) section: Backup data section -->
         <div id="pulldataBackup" class="blank-sheet">
             <div class="header-container">
                 <h1>Pulldata (Backup)</h1>
                 <div class="header-right">
-                    <button class="clear-btn" onclick="clearSheet('pulldataBackup')">Clear Data</button>
+                    <button class="clear-btn" onclick="clearSheet('pulldataBackupTable')">Clear Data</button>
+                    <button class="export-btn" onclick="exportToCSV('pulldataBackupTable')">Export to CSV</button>
                     <div class="date-time" id="dateTimeBackup"></div>
                 </div>
             </div>
+            <table id="pulldataBackupTable">
+                <thead>
+                    <tr>
+                        <th>Heading Name</th>
+                        <th>Heading id</th>
+                        <th>Definition</th>
+                        <th>Family</th>
+                        <th>PDM NUM</th>
+                        <th>Link</th>
+                        <th>HOS</th>
+                        <th>Updated By</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        // Function to format heading IDs by removing non-numeric characters and padding with zeros
         function formatHeadingId(headingId) {
             let cleanNumber = headingId.replace(/ID:/g, '').replace(/[^0-9]/g, '');
             return cleanNumber.padStart(8, '0');
         }
 
-        // Function to extract the first number from a string
         function extractNumber(str) {
             const match = str.match(/\d+/);
             return match ? match[0] : '';
         }
 
-        // Synchronizes data from Scraper Data (Classification) to Classification Details
         function syncToClassificationDetails() {
-            const scraperTable = document.getElementById('dataTable'); // Get Scraper Data table
-            const classificationTable = document.getElementById('classificationDetailsTable'); // Get Classification Details table
+            const scraperTable = document.getElementById('dataTable');
+            const classificationTable = document.getElementById('classificationDetailsTable');
             
-            const scraperRows = scraperTable.getElementsByTagName('tbody')[0].rows; // Get rows from Scraper Data
-            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows; // Get rows from Classification Details
+            const scraperRows = scraperTable.getElementsByTagName('tbody')[0].rows;
+            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
 
-            for (let i = 0; i < Math.max(scraperRows.length, classificationRows.length); i++) {
+            // Allow dynamic row addition for dataTable (no limit, but sync all rows up to scraperRows.length)
+            const maxRows = scraperRows.length;
+
+            for (let i = 0; i < maxRows; i++) {
                 if (i >= classificationRows.length) {
-                    addRow('classificationDetailsTable'); // Add row if needed in Classification Details
+                    addRow('classificationDetailsTable');
                 }
                 
-                const classificationRow = classificationTable.getElementsByTagName('tbody')[0].rows[i]; // Current Classification row
+                const classificationRow = classificationTable.getElementsByTagName('tbody')[0].rows[i];
+                const scraperRow = scraperRows[i];
+                const headingIdInput = scraperRow.cells[1].querySelector('input');
+                const headingNameInput = scraperRow.cells[0].querySelector('input');
+                const definitionInput = scraperRow.cells[2].querySelector('input');
+                const familyInput = scraperRow.cells[3].querySelector('input');
+                const pdmNumInput = scraperRow.cells[4].querySelector('input');
+                const linkInput = scraperRow.cells[5].querySelector('input');
                 
-                if (i < scraperRows.length) {
-                    const scraperRow = scraperRows[i]; // Current Scraper row
-                    const headingIdInput = scraperRow.cells[1].querySelector('input'); // Heading ID input
-                    const headingNameInput = scraperRow.cells[0].querySelector('input'); // Heading Name input
-                    const definitionInput = scraperRow.cells[2].querySelector('input'); // Definition input
-                    const familyInput = scraperRow.cells[3].querySelector('input'); // Family input
-                    const pomNumInput = scraperRow.cells[4].querySelector('input'); // PDM NUM input
-                    const linkInput = scraperRow.cells[5].querySelector('input'); // Link input
-                    
-                    if (headingIdInput.value) {
-                        classificationRow.cells[0].querySelector('input').value = formatHeadingId(headingIdInput.value); // Format and set Heading ID
-                    }
-                    if (headingNameInput.value) {
-                        classificationRow.cells[1].querySelector('input').value = headingNameInput.value; // Set Heading Name
-                    }
-                    if (familyInput.value) {
-                        classificationRow.cells[2].querySelector('input').value = familyInput.value; // Set Family
-                    }
-                    if (linkInput.value) {
-                        classificationRow.cells[3].querySelector('input').value = linkInput.value; // Set Link
-                    }
+                if (headingIdInput.value) {
+                    classificationRow.cells[0].querySelector('input').value = formatHeadingId(headingIdInput.value);
+                }
+                if (headingNameInput.value) {
+                    classificationRow.cells[1].querySelector('input').value = headingNameInput.value;
+                }
+                if (familyInput.value) {
+                    classificationRow.cells[2].querySelector('input').value = familyInput.value;
+                }
+                if (linkInput.value) {
+                    classificationRow.cells[3].querySelector('input').value = linkInput.value;
+                }
 
-                    if (pomNumInput.value) {
-                        classificationRow.cells[4].querySelector('input').value = pomNumInput.value; // Set PDM NUM
-                    } else if (definitionInput.value) {
-                        const numberFromDefinition = extractNumber(definitionInput.value); // Extract number from definition
-                        if (numberFromDefinition) {
-                            classificationRow.cells[4].querySelector('input').value = numberFromDefinition; // Set PDM NUM if found
-                        }
+                if (pdmNumInput.value) {
+                    classificationRow.cells[4].querySelector('input').value = pdmNumInput.value;
+                } else if (definitionInput.value) {
+                    const numberFromDefinition = extractNumber(definitionInput.value);
+                    if (numberFromDefinition) {
+                        classificationRow.cells[4].querySelector('input').value = numberFromDefinition;
                     }
                 }
             }
-            syncPDMText(); // Synchronize PDM text after updating classification details
+            syncPDMText();
         }
 
-        // Synchronizes PDM text from Scraper Data (PDM) to Classification Details
         function syncPDMText() {
-            const pdmTable = document.getElementById('dataTablePDM'); // Get Scraper Data (PDM) table
-            const classificationTable = document.getElementById('classificationDetailsTable'); // Get Classification Details table
+            const pdmTable = document.getElementById('dataTablePDM');
+            const classificationTable = document.getElementById('classificationDetailsTable');
             
-            const pdmRows = pdmTable.getElementsByTagName('tbody')[0].rows; // Get rows from PDM Data
-            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows; // Get rows from Classification Details
+            const pdmRows = pdmTable.getElementsByTagName('tbody')[0].rows;
+            const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
 
-            for (let i = 0; i < classificationRows.length; i++) {
-                const classificationRow = classificationRows[i]; // Current Classification row
-                const pdmNumInput = classificationRow.cells[4].querySelector('input'); // PDM NUM input
-                const pdmTextInput = classificationRow.cells[5].querySelector('input'); // PDM TEXT input
-                const pdmNumValue = pdmNumInput.value.trim(); // Trimmed PDM number value
+            // Allow dynamic row addition for dataTablePDM and classificationDetailsTable (no limit)
+            const maxRows = Math.max(classificationRows.length, pdmRows.length);
+
+            for (let i = 0; i < maxRows; i++) {
+                if (i >= classificationRows.length) {
+                    addRow('classificationDetailsTable');
+                }
+                const classificationRow = classificationRows[i] || classificationTable.getElementsByTagName('tbody')[0].rows[i];
+                const pdmNumInput = classificationRow.cells[4].querySelector('input');
+                const pdmTextInput = classificationRow.cells[5].querySelector('input');
+                const pdmNumValue = pdmNumInput.value.trim();
 
                 if (!pdmNumValue) {
-                    pdmTextInput.value = ''; // Clear PDM text if no PDM number
+                    pdmTextInput.value = '';
                     continue;
                 }
 
                 if (isNaN(pdmNumValue)) {
-                    pdmTextInput.value = 'This Heading does not have PDM'; // Set message if PDM number is not numeric
+                    pdmTextInput.value = 'This Heading does not have PDM';
                     continue;
                 }
 
                 let found = false;
                 for (let j = 0; j < pdmRows.length; j++) {
-                    const pdmRow = pdmRows[j]; // Current PDM row
-                    const pdmNumSource = pdmRow.cells[0].querySelector('input').value.trim(); // Trimmed PDM number from source
-                    const pdmTextSource = pdmRow.cells[2].querySelector('input').value; // PDM text from source
+                    const pdmRow = pdmRows[j];
+                    const pdmNumSource = pdmRow.cells[0].querySelector('input').value.trim();
+                    const pdmTextSource = pdmRow.cells[2].querySelector('input').value;
 
                     if (pdmNumValue.toLowerCase() === pdmNumSource.toLowerCase()) {
-                        pdmTextInput.value = pdmTextSource; // Set matching PDM text
+                        pdmTextInput.value = pdmTextSource;
                         found = true;
                         break;
                     }
                 }
 
                 if (!found) {
-                    pdmTextInput.value = 'This PDM number does not have PDM text in Library'; // Set message if no match found
+                    pdmTextInput.value = 'This PDM number does not have PDM text in Library';
                 }
             }
         }
 
-        // Adds a new row to the specified table
         function addRow(tableId) {
-            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0]; // Get tbody of the target table
-            const newRow = table.insertRow(); // Insert a new row
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
 
-            let columns; // Define columns based on table type
+            let columns;
             if (tableId === 'dataTable') {
-                columns = ['headingName', 'headingId', 'definition', 'family', 'pomNum', 'link', 'hos', 'updatedBy'];
+                columns = ['headingName', 'headingId', 'definition', 'family', 'pdmNum', 'link', 'hos', 'updatedBy'];
             } else if (tableId === 'dataTablePDM') {
-                columns = ['pomNum', 'summary', 'pomText', 'headingCount', 'date', 'updatedBy'];
+                columns = ['pdmNum', 'summary', 'pdmText', 'headingCount', 'date', 'updatedBy'];
             } else if (tableId === 'classificationDetailsTable') {
                 columns = ['headingId', 'headingName', 'family', 'link', 'pdmNum', 'pdmText', 'headingType'];
+            } else if (tableId === 'pulldataBackupTable') {
+                columns = ['headingName', 'headingId', 'definition', 'family', 'pdmNum', 'link', 'hos', 'updatedBy'];
+            } else if (tableId === 'toolTable') {
+                columns = ['input', 'output'];
             }
 
-            columns.forEach(col => { // Add input fields for each column
-                const newCell = newRow.insertCell(); // Create a new cell
-                const input = document.createElement('input'); // Create input element
-                input.type = 'text'; // Set input type to text
-                input.name = col; // Set input name for identification
-                newCell.appendChild(input); // Add input to cell
+            columns.forEach(col => {
+                const newCell = newRow.insertCell();
+                const input = document.createElement('input');
+                input.type = 'text';
+                if (tableId === 'toolTable') {
+                    if (col === 'input') {
+                        input.className = 'input-cell';
+                    } else if (col === 'output') {
+                        input.className = 'output-cell';
+                        input.readOnly = true;
+                    }
+                }
+                input.name = col;
+                newCell.appendChild(input);
             });
 
             if (tableId === 'dataTable') {
-                syncToClassificationDetails(); // Sync if adding to Scraper Data
+                syncToClassificationDetails();
             }
             if (tableId === 'classificationDetailsTable') {
-                syncPDMText(); // Sync PDM text if adding to Classification Details
+                syncPDMText();
             }
         }
 
-        // Clears all rows in the specified table and adds 15 empty rows
+        function addToolRow() {
+            const table = document.getElementById('toolTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            const inputCell = newRow.insertCell();
+            const outputCell = newRow.insertCell();
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'input-cell';
+            input.name = `input${table.rows.length}`;
+            inputCell.appendChild(input);
+            
+            const output = document.createElement('input');
+            output.type = 'text';
+            output.className = 'output-cell';
+            output.readOnly = true;
+            outputCell.appendChild(output);
+        }
+
         function clearSheet(tableId) {
-            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0]; // Get tbody of the target table
-            table.innerHTML = ''; // Remove all existing rows
-            for (let i = 0; i < 15; i++) {
-                addRow(tableId); // Add 15 new empty rows
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            table.innerHTML = '';
+            for (let i = 0; i < 20; i++) {  // Changed from 15 to 20 for specified tables, including toolTable
+                if (tableId === 'toolTable') {
+                    addToolRow();
+                } else if (['dataTable', 'dataTablePDM', 'classificationDetailsTable', 'pulldataBackupTable'].includes(tableId)) {
+                    addRow(tableId);
+                } else {
+                    addRow(tableId);
+                }
             }
         }
 
-        // Exports table data to CSV format and triggers download
         function exportToCSV(tableId) {
-            const table = document.getElementById(tableId); // Get the target table
-            const rows = table.querySelectorAll('tbody tr'); // Get all rows in tbody
-            const csv = []; // Initialize array for CSV data
-            rows.forEach(row => { // Process each row
-                const rowData = []; // Initialize array for row data
+            const table = document.getElementById(tableId);
+            const rows = table.querySelectorAll('tbody tr');
+            const csv = [];
+            rows.forEach(row => {
+                const rowData = [];
                 if (tableId === 'tools') {
-                    // For tools, collect only input values from toolInputTable
-                    const inputCells = document.querySelectorAll('#toolInputTable input');
-                    inputCells.forEach(input => rowData.push(input.value || ''));
+                    const input = row.querySelector('.input-cell').value;
+                    const output = row.querySelector('.output-cell').value;
+                    rowData.push(input || '');
+                    rowData.push(output || '');
+                } else if (tableId === 'pulldataBackupTable') {
+                    row.querySelectorAll('input').forEach(input => rowData.push(input.value));
                 } else {
-                    // For other tables, collect input values as before
                     row.querySelectorAll('input').forEach(input => rowData.push(input.value));
                 }
-                csv.push(rowData.join(',')); // Join values with commas and add to CSV
+                csv.push(rowData.join(','));
             });
-            const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n'); // Create CSV content
-            const encodedUri = encodeURI(csvContent); // Encode URI for download
-            const link = document.createElement('a'); // Create download link
-            link.setAttribute('href', encodedUri); // Set href to CSV data
-            link.setAttribute('download', `${tableId}.csv`); // Set download filename
-            document.body.appendChild(link); // Add link to document
-            link.click(); // Trigger download
+            const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', `${tableId}.csv`);
+            document.body.appendChild(link);
+            link.click();
         }
 
-        // Handles paste events to populate table cells
         function handlePaste(event, tableId) {
-            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0]; // Get tbody of the target table
-            const clipboardData = event.clipboardData || window.clipboardData; // Get clipboard data
-            const pastedData = clipboardData.getData('text'); // Get pasted text
+            const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+            const clipboardData = event.clipboardData || window.clipboardData;
+            const pastedData = clipboardData.getData('text');
 
-            const rows = pastedData.split('\n').map(row => row.split('\t')); // Split pasted data into rows and columns (tab-separated)
-            const startCell = event.target.closest('td'); // Find the cell where paste occurred
-            const startRow = startCell.parentElement; // Find the row of the start cell
-            const startRowIndex = Array.from(startRow.parentElement.children).indexOf(startRow); // Get row index
-            const startCellIndex = Array.from(startRow.children).indexOf(startCell); // Get cell index
+            // Handle pasting differently for all specified tables to allow dynamic row addition
+            let rows;
+            if (['pulldataBackupTable', 'dataTablePDM', 'dataTable', 'classificationDetailsTable', 'toolTable'].includes(tableId)) {
+                rows = pastedData.split('\n').map(row => row.split('\t')); // No limit for these tables
+            } else {
+                rows = pastedData.split('\n').map(row => row.split('\t')).slice(0, 20); // Limit to 20 rows for other tables (none currently apply)
+            }
 
-            rows.forEach((row, rowIndex) => { // Process each pasted row
-                let currentRow = table.rows[startRowIndex + rowIndex]; // Get or create current row
+            const startCell = event.target.closest('td');
+            const startRow = startCell.parentElement;
+            const startRowIndex = Array.from(startRow.parentElement.children).indexOf(startRow);
+            const startCellIndex = Array.from(startRow.children).indexOf(startCell);
+
+            rows.forEach((row, rowIndex) => {
+                let currentRow = table.rows[startRowIndex + rowIndex];
                 if (!currentRow) {
-                    addRow(tableId); // Add row if it doesn’t exist
-                    currentRow = table.rows[startRowIndex + rowIndex]; // Update current row reference
+                    if (tableId === 'toolTable') {
+                        addToolRow();
+                    } else {
+                        addRow(tableId);
+                    }
+                    currentRow = table.rows[startRowIndex + rowIndex];
                 }
-                row.forEach((cellData, cellIndex) => { // Process each cell in the row
-                    const currentCell = currentRow.cells[startCellIndex + cellIndex]; // Get current cell
+                row.forEach((cellData, cellIndex) => {
+                    const currentCell = currentRow.cells[startCellIndex + cellIndex];
                     if (currentCell) {
-                        const input = currentCell.querySelector('input'); // Get input in cell
+                        const input = currentCell.querySelector('input');
                         if (input) {
-                            input.value = cellData; // Set input value to pasted data
+                            input.value = cellData.trim();
                         }
                     }
                 });
             });
 
             if (tableId === 'dataTable') {
-                syncToClassificationDetails(); // Sync if pasting into Scraper Data
+                syncToClassificationDetails();
             }
             if (tableId === 'classificationDetailsTable') {
-                syncPDMText(); // Sync PDM text if pasting into Classification Details
+                syncPDMText();
             }
 
-            event.preventDefault(); // Prevent default paste behavior
+            event.preventDefault();
         }
 
-        // Add paste event listeners to tables for handling clipboard input
         document.getElementById('dataTable').addEventListener('paste', (event) => handlePaste(event, 'dataTable'));
         document.getElementById('dataTablePDM').addEventListener('paste', (event) => handlePaste(event, 'dataTablePDM'));
         document.getElementById('classificationDetailsTable').addEventListener('paste', (event) => handlePaste(event, 'classificationDetailsTable'));
+        document.getElementById('toolTable').addEventListener('paste', (event) => handlePaste(event, 'toolTable'));
+        document.getElementById('pulldataBackupTable').addEventListener('paste', (event) => handlePaste(event, 'pulldataBackupTable'));
 
-        // Shows the selected sheet and updates active button state
         function showSheet(sheetId) {
-            const sheets = document.querySelectorAll('.blank-sheet'); // Get all content sections
-            sheets.forEach(sheet => sheet.style.display = 'none'); // Hide all sections
-            const selectedSheet = document.getElementById(sheetId); // Get the selected section
+            const sheets = document.querySelectorAll('.blank-sheet');
+            sheets.forEach(sheet => sheet.style.display = 'none');
+            const selectedSheet = document.getElementById(sheetId);
             if (selectedSheet) {
-                selectedSheet.style.display = 'block'; // Show the selected section
+                selectedSheet.style.display = 'block';
             }
-            const buttons = document.querySelectorAll('.sidebar button'); // Get all sidebar buttons
-            buttons.forEach(button => button.classList.remove('active')); // Remove active class from all buttons
-            const activeButton = document.querySelector(`.sidebar button[onclick="showSheet('${sheetId}')"]`); // Find the selected button
+            const buttons = document.querySelectorAll('.sidebar button');
+            buttons.forEach(button => button.classList.remove('active'));
+            const activeButton = document.querySelector(`.sidebar button[onclick="showSheet('${sheetId}')"]`);
             if (activeButton) {
-                activeButton.classList.add('active'); // Add active class to the selected button
+                activeButton.classList.add('active');
             }
         }
 
-        // Initializes tables with 15 empty rows
         function initializeTable() {
-            const table1 = document.getElementById('dataTable').getElementsByTagName('tbody')[0]; // Get Scraper Data tbody
-            const table2 = document.getElementById('dataTablePDM').getElementsByTagName('tbody')[0]; // Get Scraper Data (PDM) tbody
-            const table3 = document.getElementById('classificationDetailsTable').getElementsByTagName('tbody')[0]; // Get Classification Details tbody
-            for (let i = 0; i < 15; i++) {
-                addRow('dataTable'); // Add rows to Scraper Data
-                addRow('dataTablePDM'); // Add rows to Scraper Data (PDM)
-                addRow('classificationDetailsTable'); // Add rows to Classification Details
-            }
-            syncPDMText(); // Synchronize PDM text after initialization
+            ['dataTable', 'dataTablePDM', 'classificationDetailsTable', 'pulldataBackupTable', 'toolTable'].forEach(tableId => {
+                const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+                for (let i = 0; i < 20; i++) {  // Changed from 15 to 20 for all specified tables, including toolTable
+                    if (tableId === 'toolTable') {
+                        addToolRow();
+                    } else {
+                        addRow(tableId);
+                    }
+                }
+            });
+            syncPDMText();
         }
 
-        // Tools-specific functions
         function spacingCheck() {
-            const inputs = document.querySelectorAll('.input-cell');
-            const outputs = document.querySelectorAll('.output-cell');
-            inputs.forEach((input, index) => {
+            const rows = document.querySelectorAll('#toolTable tbody tr');
+            rows.forEach(row => {
+                const input = row.querySelector('.input-cell');
+                const outputCell = row.querySelector('.output-cell');
                 const value = input.value.trim();
                 let output = '';
                 if (value.includes('  ')) {
@@ -822,46 +812,52 @@
                 } else {
                     output = 'No extra spaces.';
                 }
-                outputs[index].textContent = output;
+                outputCell.value = output;
             });
         }
 
         function removeSpace() {
-            const inputs = document.querySelectorAll('.input-cell');
-            const outputs = document.querySelectorAll('.output-cell');
-            inputs.forEach((input, index) => {
+            const rows = document.querySelectorAll('#toolTable tbody tr');
+            rows.forEach(row => {
+                const input = row.querySelector('.input-cell');
+                const outputCell = row.querySelector('.output-cell');
                 const value = input.value.trim().replace(/\s+/g, ' ');
-                outputs[index].textContent = value || '';
-                input.value = value; // Update input to reflect removed spaces
+                outputCell.value = value || '';
+                input.value = value;
             });
         }
 
         function wordCounter() {
-            const inputs = document.querySelectorAll('.input-cell');
-            const outputs = document.querySelectorAll('.output-cell');
-            inputs.forEach((input, index) => {
+            const rows = document.querySelectorAll('#toolTable tbody tr');
+            rows.forEach(row => {
+                const input = row.querySelector('.input-cell');
+                const outputCell = row.querySelector('.output-cell');
                 const value = input.value.trim();
                 let output = '';
                 if (value) {
                     const words = value.split(/\s+/).filter(word => word.length > 0);
                     output = `${words.length} word${words.length !== 1 ? 's' : ''}.`;
                 }
-                outputs[index].textContent = output;
+                outputCell.value = output;
             });
         }
 
         function clearToolData() {
-            const inputs = document.querySelectorAll('.input-cell');
-            const outputs = document.querySelectorAll('.output-cell');
-            inputs.forEach(input => input.value = '');
-            outputs.forEach(output => output.textContent = '');
+            const rows = document.querySelectorAll('#toolTable tbody tr');
+            rows.forEach(row => {
+                const input = row.querySelector('.input-cell');
+                const outputCell = row.querySelector('.output-cell');
+                input.value = '';
+                outputCell.value = '';
+            });
         }
 
         function linkCheck() {
-            const inputs = document.querySelectorAll('.input-cell');
-            const outputs = document.querySelectorAll('.output-cell');
+            const rows = document.querySelectorAll('#toolTable tbody tr');
             const urlRegex = /^(https?:\/\/[^\s]+)$/i;
-            inputs.forEach((input, index) => {
+            rows.forEach(row => {
+                const input = row.querySelector('.input-cell');
+                const outputCell = row.querySelector('.output-cell');
                 const value = input.value.trim();
                 let output = '';
                 if (urlRegex.test(value)) {
@@ -869,16 +865,17 @@
                 } else if (value) {
                     output = 'Not a valid URL.';
                 }
-                outputs[index].textContent = output;
+                outputCell.value = output;
             });
         }
 
         function duplicatePDM() {
-            const inputs = document.querySelectorAll('.input-cell');
-            const values = Array.from(inputs).map(input => input.value.trim().toLowerCase());
+            const rows = document.querySelectorAll('#toolTable tbody tr');
+            const values = Array.from(rows).map(row => row.querySelector('.input-cell').value.trim().toLowerCase());
             const duplicates = values.filter((item, index) => values.indexOf(item) !== index && item);
-            const outputs = document.querySelectorAll('.output-cell');
-            inputs.forEach((input, index) => {
+            rows.forEach(row => {
+                const input = row.querySelector('.input-cell');
+                const outputCell = row.querySelector('.output-cell');
                 const value = input.value.trim();
                 let output = '';
                 if (duplicates.includes(value.toLowerCase()) && value) {
@@ -886,30 +883,28 @@
                 } else if (value) {
                     output = 'No duplicate PDM.';
                 }
-                outputs[index].textContent = output;
+                outputCell.value = output;
             });
         }
 
-        // Updates and displays the current date and time on each page
         function updateDateTime() {
-            const now = new Date(); // Get current date and time
+            const now = new Date();
             const dateTimeString = now.toLocaleString('en-US', {
-                dateStyle: 'medium', // Formats date as "Mar 3, 2025"
-                timeStyle: 'medium' // Formats time as "10:30:45 AM"
+                dateStyle: 'medium',
+                timeStyle: 'medium'
             });
-            document.getElementById('dateTimeScraperData').textContent = dateTimeString; // Update Scraper Data date-time
-            document.getElementById('dateTimeScraperPDM').textContent = dateTimeString; // Update Scraper Data (PDM) date-time
-            document.getElementById('dateTimeClassification').textContent = dateTimeString; // Update Classification Details date-time
-            document.getElementById('dateTimeQCReport').textContent = dateTimeString; // Update QC Report date-time
-            document.getElementById('dateTimeTools').textContent = dateTimeString; // Update Tools date-time
-            document.getElementById('dateTimeBackup').textContent = dateTimeString; // Update Pulldata (Backup) date-time
+            document.getElementById('dateTimeScraperData').textContent = dateTimeString;
+            document.getElementById('dateTimeScraperPDM').textContent = dateTimeString;
+            document.getElementById('dateTimeClassification').textContent = dateTimeString;
+            document.getElementById('dateTimeQCReport').textContent = dateTimeString;
+            document.getElementById('dateTimeTools').textContent = dateTimeString;
+            document.getElementById('dateTimeBackup').textContent = dateTimeString;
         }
 
-        // Runs on page load to set up the application
         window.onload = function() {
-            initializeTable(); // Initialize tables with empty rows
-            updateDateTime(); // Set initial date and time
-            setInterval(updateDateTime, 1000); // Update date and time every second
+            initializeTable();
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
         };
     </script>
 </body>
