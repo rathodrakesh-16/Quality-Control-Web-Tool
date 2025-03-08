@@ -53,7 +53,6 @@ function syncToClassificationDetails() {
             }
         }
     }
-    syncPDMText();
 }
 
 function syncPDMText() {
@@ -103,6 +102,12 @@ function syncPDMText() {
     }
 }
 
+function generateDetails() {
+    syncToClassificationDetails(); // Run first
+    syncPDMText(); // Run second
+    alert('Details generated successfully!');
+}
+
 function addRow(tableId) {
     const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
     const newRow = table.insertRow();
@@ -135,13 +140,6 @@ function addRow(tableId) {
         input.name = col;
         newCell.appendChild(input);
     });
-
-    if (tableId === 'dataTable') {
-        syncToClassificationDetails();
-    }
-    if (tableId === 'classificationDetailsTable') {
-        syncPDMText();
-    }
 }
 
 function addToolRow() {
@@ -163,18 +161,29 @@ function addToolRow() {
     outputCell.appendChild(output);
 }
 
-function clearSheet(tableId) {
-    const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-    table.innerHTML = '';
-    for (let i = 0; i < 20; i++) {
+function clearSheet(tableId, rowCount = 20) {
+    const table = document.getElementById(tableId);
+    if (!table) {
+        console.error(`Table with ID ${tableId} not found.`);
+        return;
+    }
+    if (!confirm('Are you sure you want to clear the table? This action cannot be undone.')) {
+        return;
+    }
+    const tbody = table.getElementsByTagName('tbody')[0];
+    const originalClasses = tbody.className;
+    tbody.innerHTML = '';
+    tbody.className = originalClasses;
+    const rowsToAdd = [];
+    for (let i = 0; i < rowCount; i++) {
         if (tableId === 'toolTable') {
-            addToolRow();
-        } else if (['dataTable', 'dataTablePDM', 'classificationDetailsTable', 'pulldataBackupTable'].includes(tableId)) {
-            addRow(tableId);
+            rowsToAdd.push(() => addToolRow());
         } else {
-            addRow(tableId);
+            rowsToAdd.push(() => addRow(tableId));
         }
     }
+    rowsToAdd.forEach(add => add());
+    alert(`Table ${tableId} has been cleared and reinitialized with ${rowCount} rows.`);
 }
 
 function exportToCSV(tableId) {
@@ -242,13 +251,6 @@ function handlePaste(event, tableId) {
         });
     });
 
-    if (tableId === 'dataTable') {
-        syncToClassificationDetails();
-    }
-    if (tableId === 'classificationDetailsTable') {
-        syncPDMText();
-    }
-
     event.preventDefault();
 }
 
@@ -288,33 +290,29 @@ function initializeTable() {
             }
         }
     });
-    syncPDMText();
 }
 
 function spacingCheck() {
     const rows = document.querySelectorAll('#toolTable tbody tr');
-    const whitespaceRegex = /\s{2,}|\t|\n/; // Matches 2+ spaces, tabs, or newlines
+    const whitespaceRegex = /\s{2,}|\t|\n/;
 
     rows.forEach(row => {
         const input = row.querySelector('.input-cell');
         const outputCell = row.querySelector('.output-cell');
-        const value = input.value; // Don't trim yet to catch leading/trailing spaces
+        const value = input.value;
         let output = '';
 
-        // Check for no input
         if (!value) {
             output = '';
         } else {
             const trimmedValue = value.trim();
             const issues = [];
 
-            // Check leading/trailing spaces
             if (value !== trimmedValue) {
                 if (value.startsWith(' ')) issues.push('leading space');
                 if (value.endsWith(' ')) issues.push('trailing space');
             }
 
-            // Check internal whitespace issues
             if (whitespaceRegex.test(trimmedValue)) {
                 const extraSpaces = (trimmedValue.match(/\s{2,}/g) || []).length;
                 const tabs = (trimmedValue.match(/\t/g) || []).length;
@@ -325,7 +323,6 @@ function spacingCheck() {
                 if (newlines > 0) issues.push(`${newlines} newline${newlines > 1 ? 's' : ''}`);
             }
 
-            // Generate output
             if (issues.length > 0) {
                 output = `Issues: ${issues.join(', ')}`;
                 outputCell.classList.add('error-text');
@@ -386,9 +383,8 @@ async function linkCheck() {
         let output = '';
 
         if (!value) {
-            output = ''; // Empty input
+            output = '';
         } else if (!urlRegex.test(value)) {
-            // Basic structure validation
             if (!value.match(/^https?:\/\//i)) {
                 output = 'Missing http:// or https://';
             } else if (!value.match(/\.[a-zA-Z]{2,}$/i)) {
@@ -401,54 +397,31 @@ async function linkCheck() {
                 const url = new URL(value.startsWith('http') ? value : 'https://' + value);
                 const hostname = url.hostname;
 
-                // Check domain length and structure
                 if (hostname.length > 253) {
                     output = 'Domain name too long';
                 } else if (!hostname.includes('.')) {
                     output = 'Invalid domain (no TLD)';
                 } else {
-                    // Check protocol and handle missing HTTPS or HTTP cases
                     if (!value.match(/^https?:\/\//i)) {
-                        output = 'Valid URL missing HTTPS'; // For valid URLs without protocol
+                        output = 'Valid URL missing HTTPS';
                     } else if (url.protocol === 'http:') {
                         output = 'Valid URL! (less secure has HTTP)';
                     } else {
                         output = 'Valid URL!';
                     }
-
-                    // Optional: Check if URL is reachable (commented out)
-                    /*
-                    try {
-                        const response = await fetch(url, { method: 'HEAD', mode: 'no-cors' });
-                        output = !value.match(/^https?:\/\//i) 
-                            ? 'Valid URL missing HTTPS (connection possible)'
-                            : url.protocol === 'http:' 
-                            ? 'Valid URL! (less secure has HTTP, connection possible)' 
-                            : 'Valid URL! (Connection possible)';
-                    } catch (error) {
-                        output = !value.match(/^https?:\/\//i) 
-                            ? 'Valid URL missing HTTPS (may not be reachable)'
-                            : url.protocol === 'http:' 
-                            ? 'Valid URL! (less secure has HTTP, may not be reachable)' 
-                            : 'Valid URL! (May not be reachable)';
-                    }
-                    */
                 }
             } catch (e) {
                 output = 'Invalid URL syntax';
             }
         }
 
-        // Set the output value
         outputCell.value = output;
-
-        // Apply or remove error-text class based on output
         if (output === 'Valid URL!') {
             outputCell.classList.remove('error-text');
-        } else if (output) { // Only add class if there's output
+        } else if (output) {
             outputCell.classList.add('error-text');
         } else {
-            outputCell.classList.remove('error-text'); // Remove class for empty output
+            outputCell.classList.remove('error-text');
         }
     }
 }
