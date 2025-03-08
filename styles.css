@@ -19,6 +19,80 @@ body {
 }
 
 .sidebar .header {
+    margin-bottom: 20px; /* Ensure space between header and buttons below */
+    padding: 0; /* No padding on the header itself, let the button handle it */
+}
+
+.sidebar .header button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #1a2634;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    font-family: 'Calibri', sans-serif;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar .header button:hover {
+    background-color: #14212b;
+    transform: translateX(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar .header button.active {
+    background-color: white;
+    color: #1a2634;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar .header button i {
+    margin-right: 12px;
+    font-size: 16px;
+}
+
+.sidebar button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: #1a2634;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+    font-family: 'Calibri', sans-serif;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar button:hover {
+    background-color: #14212b;
+    transform: translateX(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar button.active {
+    background-color: white;
+    color: #1a2634;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar button i {
+    margin-right: 12px;
+    font-size: 16px;
+}
+
+.sidebar .footer .header {
     color: #ffffff;
     font-size: 14px;
     font-family: 'Calibri', sans-serif;
@@ -27,53 +101,9 @@ body {
     background: linear-gradient(135deg, #2d3b4e, #1a2634);
     padding: 12px 15px;
     border-radius: 6px;
-}
-
-.sidebar button {
     display: flex;
+    justify-content: center;
     align-items: center;
-    width: 100%;
-    padding: 10px 15px; /* Adjusted padding to match the image's height and spacing */
-    margin-bottom: 10px; /* Consistent spacing between buttons */
-    background-color: #1a2634; /* Matches the dark blue background from the image */
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Matte subtle white border */
-    border-radius: 6px; /* Slight rounding to match the image */
-    cursor: pointer;
-    text-align: left;
-    font-size: 14px;
-    font-family: 'Calibri', sans-serif;
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-}
-
-.sidebar button:hover {
-    background-color: #14212b; /* Slightly darker shade for hover effect */
-    transform: translateX(5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.sidebar button.active {
-    background-color: white; /* Changed to match the main content background color */
-    color: #1a2634; /* Text color changed for better contrast */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.sidebar button i {
-    margin-right: 10px; /* Space between icon and text */
-    font-size: 16px;
-}
-
-}
-
-.sidebar .footer {
-    color: white !important; /* Ensure footer text color is white */
-    font-size: 18px;
-    font-family: 'Calibri', sans-serif;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 20px;
-    letter-spacing: 1px;
 }
 
 .main-content {
@@ -176,7 +206,7 @@ input[type="text"]:focus {
 }
 
 .error-text {
-    color: #ff0000; /* Red color for error/warning messages */
+    color: #ff0000;
 }
 
 .clear-btn, .export-btn {
