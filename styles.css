@@ -33,38 +33,41 @@ body {
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 15px;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    padding: 10px 15px; /* Adjusted padding to match the image's height and spacing */
+    margin-bottom: 10px; /* Consistent spacing between buttons */
+    background-color: #1a2634; /* Matches the dark blue background from the image */
     color: white;
-    border: none;
-    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Matte subtle white border */
+    border-radius: 6px; /* Slight rounding to match the image */
     cursor: pointer;
     text-align: left;
     font-size: 14px;
     font-family: 'Calibri', sans-serif;
     transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 .sidebar button:hover {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    background-color: #14212b; /* Slightly darker shade for hover effect */
     transform: translateX(5px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar button.active {
-    background: linear-gradient(135deg, #22c55e, #16a34a);
+    background-color: white; /* Changed to match the main content background color */
+    color: #1a2634; /* Text color changed for better contrast */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar button i {
-    margin-right: 10px;
+    margin-right: 10px; /* Space between icon and text */
     font-size: 16px;
 }
 
+}
+
 .sidebar .footer {
-    color: #ffffff;
+    color: white !important; /* Ensure footer text color is white */
     font-size: 18px;
     font-family: 'Calibri', sans-serif;
     font-weight: bold;
@@ -80,7 +83,7 @@ body {
     background-color: white;
     border-radius: 15px 0 0 15px;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    position: relative; /* Ensure default content can position absolutely within this */
+    position: relative;
 }
 
 .header-container {
@@ -148,12 +151,12 @@ input[type="text"] {
     font-size: 14px;
     font-family: 'Calibri', sans-serif;
     line-height: 12px;
-    transition: border 0.2s ease; /* Smooth transition for border */
+    transition: border 0.2s ease;
 }
 
 input[type="text"]:focus {
-    border: 2px solid #6ea8fe; /* Lighter blue highlight */
-    padding: 2px; /* Adjust padding to account for thicker border */
+    border: 2px solid #6ea8fe;
+    padding: 2px;
 }
 
 .output-cell {
@@ -164,12 +167,16 @@ input[type="text"]:focus {
     font-size: 14px;
     font-family: 'Calibri', sans-serif;
     line-height: 12px;
-    transition: border 0.2s ease; /* Smooth transition for border */
+    transition: border 0.2s ease;
 }
 
 .output-cell:focus {
-    border: 2px solid #6ea8fe; /* Lighter blue highlight */
-    padding: 2px; /* Adjust padding to account for thicker border */
+    border: 2px solid #6ea8fe;
+    padding: 2px;
+}
+
+.error-text {
+    color: #ff0000; /* Red color for error/warning messages */
 }
 
 .clear-btn, .export-btn {
@@ -206,8 +213,8 @@ input[type="text"]:focus {
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #f9f9f9;
-    position: relative; /* Ensure sheets are above default content */
-    z-index: 5; /* Below default content's z-index of 10 */
+    position: relative;
+    z-index: 5;
 }
 
 .tools-container {
@@ -270,21 +277,21 @@ input[type="text"]:focus {
     padding: 5px 10px;
     width: 120px;
     height: 30px;
-    background-color: #1e6ba8; /* Same as export-btn */
+    background-color: #1e6ba8;
     color: white;
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px; /* Keeping the font size from previous request */
+    font-size: 14px;
     font-family: 'Calibri', sans-serif;
-    font-weight: 700; /* Keeping the bold weight from previous request */
+    font-weight: 700;
     text-align: center;
     transition: background-color 0.3s ease;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .tool-btn:hover {
-    background-color: #1a5a8d; /* Same as export-btn hover */
+    background-color: #1a5a8d;
 }
 
 #dataTable th:nth-child(1) { width: 150px; }
@@ -339,10 +346,10 @@ input[type="text"]:focus {
 }
 
 .logo {
-    width: 150px; /* Adjust size as needed */
+    width: 150px;
     height: auto;
     margin-bottom: 20px;
-    opacity: 0; /* Start hidden for animation */
+    opacity: 0;
     animation: fadeIn 2s ease-in-out forwards;
 }
 
@@ -350,11 +357,10 @@ input[type="text"]:focus {
     font-size: 36px;
     font-family: 'Calibri', Arial, sans-serif;
     color: #1a2634;
-    opacity: 0; /* Start hidden for animation */
-    animation: fadeIn 2s ease-in-out 0.5s forwards; /* Delay by 0.5s after logo */
+    opacity: 0;
+    animation: fadeIn 2s ease-in-out 0.5s forwards;
 }
 
-/* Fade-in animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
