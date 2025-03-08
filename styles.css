@@ -19,8 +19,8 @@ body {
 }
 
 .sidebar .header {
-    margin-bottom: 20px; /* Ensure space between header and buttons below */
-    padding: 0; /* No padding on the header itself, let the button handle it */
+    margin-bottom: 20px;
+    padding: 0;
 }
 
 .sidebar .header button {
@@ -235,6 +235,22 @@ input[type="text"]:focus {
 
 .export-btn:hover {
     background-color: #1a5a8d;
+}
+
+.sync-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: 'Calibri', sans-serif;
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.sync-btn:hover {
+    background-color: #45a049;
 }
 
 .blank-sheet {
