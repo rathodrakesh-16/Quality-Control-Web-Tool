@@ -15,7 +15,6 @@ function syncToClassificationDetails() {
     const scraperRows = scraperTable.getElementsByTagName('tbody')[0].rows;
     const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
 
-    // Allow dynamic row addition for dataTable (no limit, but sync all rows up to scraperRows.length)
     const maxRows = scraperRows.length;
 
     for (let i = 0; i < maxRows; i++) {
@@ -64,7 +63,6 @@ function syncPDMText() {
     const pdmRows = pdmTable.getElementsByTagName('tbody')[0].rows;
     const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
 
-    // Allow dynamic row addition for dataTablePDM and classificationDetailsTable (no limit)
     const maxRows = Math.max(classificationRows.length, pdmRows.length);
 
     for (let i = 0; i < maxRows; i++) {
@@ -168,7 +166,7 @@ function addToolRow() {
 function clearSheet(tableId) {
     const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
     table.innerHTML = '';
-    for (let i = 0; i < 20; i++) {  // Changed from 15 to 20 for all specified tables, including toolTable
+    for (let i = 0; i < 20; i++) {
         if (tableId === 'toolTable') {
             addToolRow();
         } else if (['dataTable', 'dataTablePDM', 'classificationDetailsTable', 'pulldataBackupTable'].includes(tableId)) {
@@ -211,12 +209,11 @@ function handlePaste(event, tableId) {
     const clipboardData = event.clipboardData || window.clipboardData;
     const pastedData = clipboardData.getData('text');
 
-    // Handle pasting differently for all specified tables to allow dynamic row addition
     let rows;
     if (['pulldataBackupTable', 'dataTablePDM', 'dataTable', 'classificationDetailsTable', 'toolTable'].includes(tableId)) {
-        rows = pastedData.split('\n').map(row => row.split('\t')); // No limit for these tables
+        rows = pastedData.split('\n').map(row => row.split('\t'));
     } else {
-        rows = pastedData.split('\n').map(row => row.split('\t')).slice(0, 20); // Limit to 20 rows for other tables (none currently apply)
+        rows = pastedData.split('\n').map(row => row.split('\t')).slice(0, 20);
     }
 
     const startCell = event.target.closest('td');
@@ -270,7 +267,7 @@ function showSheet(sheetId) {
     }
     const defaultContent = document.getElementById('defaultContent');
     if (defaultContent) {
-        defaultContent.style.display = 'none'; // Hide default content when a sheet is shown
+        defaultContent.style.display = 'none';
     }
     const buttons = document.querySelectorAll('.sidebar button');
     buttons.forEach(button => button.classList.remove('active'));
@@ -283,7 +280,7 @@ function showSheet(sheetId) {
 function initializeTable() {
     ['dataTable', 'dataTablePDM', 'classificationDetailsTable', 'pulldataBackupTable', 'toolTable'].forEach(tableId => {
         const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-        for (let i = 0; i < 20; i++) {  // Changed from 15 to 20 for all specified tables, including toolTable
+        for (let i = 0; i < 20; i++) {
             if (tableId === 'toolTable') {
                 addToolRow();
             } else {
@@ -296,16 +293,48 @@ function initializeTable() {
 
 function spacingCheck() {
     const rows = document.querySelectorAll('#toolTable tbody tr');
+    const whitespaceRegex = /\s{2,}|\t|\n/; // Matches 2+ spaces, tabs, or newlines
+
     rows.forEach(row => {
         const input = row.querySelector('.input-cell');
         const outputCell = row.querySelector('.output-cell');
-        const value = input.value.trim();
+        const value = input.value; // Don't trim yet to catch leading/trailing spaces
         let output = '';
-        if (value.includes('  ')) {
-            output = 'Contains extra spaces!';
+
+        // Check for no input
+        if (!value) {
+            output = '';
         } else {
-            output = 'No extra spaces.';
+            const trimmedValue = value.trim();
+            const issues = [];
+
+            // Check leading/trailing spaces
+            if (value !== trimmedValue) {
+                if (value.startsWith(' ')) issues.push('leading space');
+                if (value.endsWith(' ')) issues.push('trailing space');
+            }
+
+            // Check internal whitespace issues
+            if (whitespaceRegex.test(trimmedValue)) {
+                const extraSpaces = (trimmedValue.match(/\s{2,}/g) || []).length;
+                const tabs = (trimmedValue.match(/\t/g) || []).length;
+                const newlines = (trimmedValue.match(/\n/g) || []).length;
+
+                if (extraSpaces > 0) issues.push(`${extraSpaces} extra space${extraSpaces > 1 ? 's' : ''}`);
+                if (tabs > 0) issues.push(`${tabs} tab${tabs > 1 ? 's' : ''}`);
+                if (newlines > 0) issues.push(`${newlines} newline${newlines > 1 ? 's' : ''}`);
+            }
+
+            // Generate output
+            if (issues.length > 0) {
+                output = `Issues: ${issues.join(', ')}`;
+                outputCell.classList.add('error-text');
+            } else {
+                output = 'No spacing issues.';
+                outputCell.classList.remove('error-text');
+            }
         }
+
         outputCell.value = output;
     });
 }
@@ -346,21 +375,82 @@ function clearToolData() {
     });
 }
 
-function linkCheck() {
+async function linkCheck() {
     const rows = document.querySelectorAll('#toolTable tbody tr');
-    const urlRegex = /^(https?:\/\/[^\s]+)$/i;
-    rows.forEach(row => {
+    const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/i;
+
+    for (const row of rows) {
         const input = row.querySelector('.input-cell');
         const outputCell = row.querySelector('.output-cell');
         const value = input.value.trim();
         let output = '';
-        if (urlRegex.test(value)) {
-            output = 'Valid URL!';
-        } else if (value) {
-            output = 'Not a valid URL.';
+
+        if (!value) {
+            output = ''; // Empty input
+        } else if (!urlRegex.test(value)) {
+            // Basic structure validation
+            if (!value.match(/^https?:\/\//i)) {
+                output = 'Missing http:// or https://';
+            } else if (!value.match(/\.[a-zA-Z]{2,}$/i)) {
+                output = 'Invalid or missing domain extension';
+            } else {
+                output = 'Invalid URL format';
+            }
+        } else {
+            try {
+                const url = new URL(value.startsWith('http') ? value : 'https://' + value);
+                const hostname = url.hostname;
+
+                // Check domain length and structure
+                if (hostname.length > 253) {
+                    output = 'Domain name too long';
+                } else if (!hostname.includes('.')) {
+                    output = 'Invalid domain (no TLD)';
+                } else {
+                    // Check protocol and handle missing HTTPS or HTTP cases
+                    if (!value.match(/^https?:\/\//i)) {
+                        output = 'Valid URL missing HTTPS'; // For valid URLs without protocol
+                    } else if (url.protocol === 'http:') {
+                        output = 'Valid URL! (less secure has HTTP)';
+                    } else {
+                        output = 'Valid URL!';
+                    }
+
+                    // Optional: Check if URL is reachable (commented out)
+                    /*
+                    try {
+                        const response = await fetch(url, { method: 'HEAD', mode: 'no-cors' });
+                        output = !value.match(/^https?:\/\//i) 
+                            ? 'Valid URL missing HTTPS (connection possible)'
+                            : url.protocol === 'http:' 
+                            ? 'Valid URL! (less secure has HTTP, connection possible)' 
+                            : 'Valid URL! (Connection possible)';
+                    } catch (error) {
+                        output = !value.match(/^https?:\/\//i) 
+                            ? 'Valid URL missing HTTPS (may not be reachable)'
+                            : url.protocol === 'http:' 
+                            ? 'Valid URL! (less secure has HTTP, may not be reachable)' 
+                            : 'Valid URL! (May not be reachable)';
+                    }
+                    */
+                }
+            } catch (e) {
+                output = 'Invalid URL syntax';
+            }
         }
+
+        // Set the output value
         outputCell.value = output;
-    });
+
+        // Apply or remove error-text class based on output
+        if (output === 'Valid URL!') {
+            outputCell.classList.remove('error-text');
+        } else if (output) { // Only add class if there's output
+            outputCell.classList.add('error-text');
+        } else {
+            outputCell.classList.remove('error-text'); // Remove class for empty output
+        }
+    }
 }
 
 function duplicatePDM() {
@@ -400,9 +490,8 @@ window.onload = function() {
     updateDateTime();
     setInterval(updateDateTime, 1000);
     
-    // Show default content on load
     const defaultContent = document.getElementById('defaultContent');
     if (defaultContent) {
-        defaultContent.style.display = 'flex'; // Ensure default content is visible initially
+        defaultContent.style.display = 'flex';
     }
 };
