@@ -22,12 +22,15 @@
         </div>
         <div class="footer">
             <div class="date-time" id="dateTimeSidebar"></div>
-            <div class="header">Quality Control Tool</div>
+            <div class="header">Quality Control Tool Beta v0.7</div>
         </div>
     </div>
 
     <div class="main-content">
         <div id="defaultContent" class="default-content">
+            <div class="disclaimer-box">
+                <p class="disclaimer-text"><strong>Disclaimer!</strong> : The Quality Control Tool does not back up or store data. Please export the necessary data before leaving the web page.</p>
+            </div>
             <img src="Images/main.jfif" alt="Technosoft Engineering Logo" class="logo">
             <h2 class="animated-text">Technosoft Engineering</h2>
         </div>
@@ -148,19 +151,19 @@
 
         <div id="tools" class="blank-sheet">
             <div class="header-container">
-                <!-- Empty -->
-            </div>
-            <div class="toolbar">
-                <div class="tool-btn-group">
-                    <button class="tool-btn" onclick="spacingCheck()" aria-label="Check for spacing issues"><i class="fas fa-align-left"></i> Spacing Check</button>
-                    <button class="tool-btn" onclick="removeSpace()" aria-label="Remove extra spaces"><i class="fas fa-compress-alt"></i> Remove Space</button>
-                    <button class="tool-btn" onclick="wordCounter()" aria-label="Count words in the input"><i class="fas fa-sort-numeric-up"></i> Word Counter</button>
-                    <button class="tool-btn" onclick="linkCheck()" aria-label="Check if the input is a valid URL"><i class="fas fa-link"></i> Link Check</button>
-                    <button class="tool-btn" onclick="duplicatePDM()" aria-label="Check for duplicate PDM values"><i class="fas fa-clone"></i> Duplicate PDM</button>
-                </div>
-                <div class="toolbar-right">
-                    <button class="clear-btn" onclick="clearSheet('toolTable')" aria-label="Clear Data"><i class="fas fa-trash-alt"></i></button>
-                    <button class="export-btn" onclick="exportToCSV('toolTable')" aria-label="Export to CSV"><i class="fas fa-file-export"></i></button>
+                <h1>Tools</h1>
+                <div class="toolbar">
+                    <div class="tool-btn-group">
+                        <button class="tool-btn" onclick="spacingCheck()" aria-label="Check for spacing issues"><i class="fas fa-align-left"></i> Spacing Check</button>
+                        <button class="tool-btn" onclick="removeSpace()" aria-label="Remove extra spaces"><i class="fas fa-compress-alt"></i> Remove Space</button>
+                        <button class="tool-btn" onclick="wordCounter()" aria-label="Count words in the input"><i class="fas fa-sort-numeric-up"></i> Word Counter</button>
+                        <button class="tool-btn" onclick="linkCheck()" aria-label="Check if the input is a valid URL"><i class="fas fa-link"></i> Link Check</button>
+                        <button class="tool-btn" onclick="duplicatePDM()" aria-label="Check for duplicate PDM values"><i class="fas fa-clone"></i> Duplicate PDM</button>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="clear-btn" onclick="clearSheet('toolTable')" aria-label="Clear Data"><i class="fas fa-trash-alt"></i></button>
+                        <button class="export-btn" onclick="exportToCSV('toolTable')" aria-label="Export to CSV"><i class="fas fa-file-export"></i></button>
+                    </div>
                 </div>
             </div>
             <div class="tools-container">
