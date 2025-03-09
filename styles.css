@@ -42,7 +42,7 @@ body {
 
 .sidebar .header button:hover {
     background-color: #14212b;
-    transform: translateX(5px);
+    transform: translateX(8px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -77,7 +77,7 @@ body {
 
 .sidebar button:hover {
     background-color: #14212b;
-    transform: translateX(5px);
+    transform: translateX(8px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -135,7 +135,15 @@ body {
     border-radius: 8px 8px 0 0;
 }
 
-h1, h2 {
+h1 {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    font-family: 'Calibri', sans-serif;
+    font-weight: bold;
+}
+
+h2 {
     font-size: 13px;
     color: #333;
     margin: 0;
@@ -222,8 +230,10 @@ h1, h2 {
 
 .header-right {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
+    align-items: center;
+    padding: 5px 0;
 }
 
 .date-time {
@@ -313,6 +323,12 @@ input[type="text"]:focus {
 .clear-btn {
     background-color: #e66b6b;
     color: #333;
+    padding: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .clear-btn:hover {
@@ -327,6 +343,12 @@ input[type="text"]:focus {
 .export-btn {
     background-color: #1e6ba8;
     color: white;
+    padding: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .export-btn:hover {
@@ -341,6 +363,12 @@ input[type="text"]:focus {
 .sync-btn {
     background-color: #4CAF50;
     color: white;
+    padding: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .sync-btn:hover {
@@ -426,23 +454,24 @@ input[type="text"]:focus {
 }
 
 .tool-btn {
-    display: inline-block;
-    width: auto;
-    height: 28px;
-    background-color: white;
-    color: #1a2634;
-    border: 0.5px solid #2d3b4e;
-    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    height: 32px;
+    background-color: #2d3b4e;
+    color: white;
+    border: 1px solid #2d3b4e;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 11px;
+    font-size: 12px;
     font-family: 'Calibri', sans-serif;
-    padding: 4px 12px;
+    padding: 6px 14px;
     white-space: nowrap;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .tool-btn:hover {
-    background-color: #1a5a8d;
+    background-color: #3e4e63;
+    transform: scale(1.05);
 }
 
 .tool-btn:focus {
@@ -453,7 +482,36 @@ input[type="text"]:focus {
 .tool-btn.active {
     background-color: #1e6ba8;
     color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    transform: scale(1);
+}
+
+.tool-btn i {
+    margin-right: 6px;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px 16px; /* Reduced from 8px to 6px top/bottom */
+    background-color: #f5f5f5;
+    border: 1px solid #ddd; /* Full border instead of just bottom */
+    border-radius: 8px; /* Added for rounded corners */
+    align-items: center;
+}
+
+.tool-btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.toolbar-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 #dataTable th:nth-child(1) { width: 150px; }
