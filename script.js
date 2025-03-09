@@ -1,3 +1,16 @@
+// Cache DOM elements to reduce repeated queries
+const tableCache = {
+    dataTable: document.getElementById('dataTable'),
+    dataTablePDM: document.getElementById('dataTablePDM'),
+    classificationDetailsTable: document.getElementById('classificationDetailsTable'),
+    toolTable: document.getElementById('toolTable'),
+    pulldataBackupTable: document.getElementById('pulldataBackupTable'),
+    pulldataBackupTablePDM: document.getElementById('pulldataBackupTablePDM')
+};
+
+// Store paste event listeners for cleanup
+const pasteListeners = {};
+
 function formatHeadingId(headingId) {
     let cleanNumber = headingId.replace(/ID:/g, '').replace(/[^0-9]/g, '');
     return cleanNumber.padStart(8, '0');
@@ -9,69 +22,98 @@ function extractNumber(str) {
 }
 
 function syncToClassificationDetails() {
-    const scraperTable = document.getElementById('dataTable');
-    const classificationTable = document.getElementById('classificationDetailsTable');
-    
-    const scraperRows = scraperTable.getElementsByTagName('tbody')[0].rows;
-    const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
+    if (!tableCache.dataTable || !tableCache.classificationDetailsTable) {
+        console.error('Required tables not found for syncToClassificationDetails.');
+        return;
+    }
 
+    const scraperTbody = tableCache.dataTable.getElementsByTagName('tbody')[0];
+    const classificationTbody = tableCache.classificationDetailsTable.getElementsByTagName('tbody')[0];
+    if (!scraperTbody || !classificationTbody) {
+        console.error('Table bodies not found for syncToClassificationDetails.');
+        return;
+    }
+
+    const scraperRows = scraperTbody.rows;
     const maxRows = scraperRows.length;
 
-    for (let i = 0; i < maxRows; i++) {
-        if (i >= classificationRows.length) {
-            addRow('classificationDetailsTable');
-        }
-        
-        const classificationRow = classificationTable.getElementsByTagName('tbody')[0].rows[i];
-        const scraperRow = scraperRows[i];
-        const headingIdInput = scraperRow.cells[1].querySelector('input');
-        const headingNameInput = scraperRow.cells[0].querySelector('input');
-        const definitionInput = scraperRow.cells[2].querySelector('input');
-        const familyInput = scraperRow.cells[3].querySelector('input');
-        const pdmNumInput = scraperRow.cells[4].querySelector('input');
-        const linkInput = scraperRow.cells[5].querySelector('input');
-        
-        if (headingIdInput.value) {
-            classificationRow.cells[0].querySelector('input').value = formatHeadingId(headingIdInput.value);
-        }
-        if (headingNameInput.value) {
-            classificationRow.cells[1].querySelector('input').value = headingNameInput.value;
-        }
-        if (familyInput.value) {
-            classificationRow.cells[2].querySelector('input').value = familyInput.value;
-        }
-        if (linkInput.value) {
-            classificationRow.cells[3].querySelector('input').value = linkInput.value;
-        }
+    // Batch row addition
+    if (maxRows > classificationTbody.rows.length) {
+        const rowsToAdd = maxRows - classificationTbody.rows.length;
+        addRow('classificationDetailsTable', rowsToAdd);
+    }
 
-        if (pdmNumInput.value) {
-            classificationRow.cells[4].querySelector('input').value = pdmNumInput.value;
-        } else if (definitionInput.value) {
-            const numberFromDefinition = extractNumber(definitionInput.value);
+    const classificationRows = classificationTbody.rows;
+    for (let i = 0; i < maxRows; i++) {
+        const classificationRow = classificationRows[i];
+        const scraperRow = scraperRows[i];
+        const inputs = {
+            headingId: scraperRow.cells[1]?.querySelector('input'),
+            headingName: scraperRow.cells[0]?.querySelector('input'),
+            definition: scraperRow.cells[2]?.querySelector('input'),
+            family: scraperRow.cells[3]?.querySelector('input'),
+            pdmNum: scraperRow.cells[4]?.querySelector('input'),
+            link: scraperRow.cells[5]?.querySelector('input')
+        };
+        const outputs = {
+            headingId: classificationRow.cells[0].querySelector('input'),
+            headingName: classificationRow.cells[1].querySelector('input'),
+            family: classificationRow.cells[2].querySelector('input'),
+            link: classificationRow.cells[3].querySelector('input'),
+            pdmNum: classificationRow.cells[4].querySelector('input')
+        };
+
+        if (inputs.headingId?.value) {
+            outputs.headingId.value = formatHeadingId(inputs.headingId.value);
+        }
+        if (inputs.headingName?.value) {
+            outputs.headingName.value = inputs.headingName.value;
+        }
+        if (inputs.family?.value) {
+            outputs.family.value = inputs.family.value;
+        }
+        if (inputs.link?.value) {
+            outputs.link.value = inputs.link.value;
+        }
+        if (inputs.pdmNum?.value) {
+            outputs.pdmNum.value = inputs.pdmNum.value;
+        } else if (inputs.definition?.value) {
+            const numberFromDefinition = extractNumber(inputs.definition.value);
             if (numberFromDefinition) {
-                classificationRow.cells[4].querySelector('input').value = numberFromDefinition;
+                outputs.pdmNum.value = numberFromDefinition;
             }
         }
     }
 }
 
 function syncPDMText() {
-    const pdmTable = document.getElementById('dataTablePDM');
-    const classificationTable = document.getElementById('classificationDetailsTable');
-    
-    const pdmRows = pdmTable.getElementsByTagName('tbody')[0].rows;
-    const classificationRows = classificationTable.getElementsByTagName('tbody')[0].rows;
+    if (!tableCache.dataTablePDM || !tableCache.classificationDetailsTable) {
+        console.error('Required tables not found for syncPDMText.');
+        return;
+    }
 
+    const pdmTbody = tableCache.dataTablePDM.getElementsByTagName('tbody')[0];
+    const classificationTbody = tableCache.classificationDetailsTable.getElementsByTagName('tbody')[0];
+    if (!pdmTbody || !classificationTbody) {
+        console.error('Table bodies not found for syncPDMText.');
+        return;
+    }
+
+    const pdmRows = pdmTbody.rows;
+    const classificationRows = classificationTbody.rows;
     const maxRows = Math.max(classificationRows.length, pdmRows.length);
 
+    // Batch row addition
+    if (maxRows > classificationRows.length) {
+        const rowsToAdd = maxRows - classificationRows.length;
+        addRow('classificationDetailsTable', rowsToAdd);
+    }
+
     for (let i = 0; i < maxRows; i++) {
-        if (i >= classificationRows.length) {
-            addRow('classificationDetailsTable');
-        }
-        const classificationRow = classificationRows[i] || classificationTable.getElementsByTagName('tbody')[0].rows[i];
-        const pdmNumInput = classificationRow.cells[4].querySelector('input');
-        const pdmTextInput = classificationRow.cells[5].querySelector('input');
-        const pdmNumValue = pdmNumInput.value.trim();
+        const classificationRow = classificationTbody.rows[i];
+        const pdmNumInput = classificationRow.cells[4]?.querySelector('input');
+        const pdmTextInput = classificationRow.cells[5]?.querySelector('input');
+        const pdmNumValue = pdmNumInput?.value?.trim() || '';
 
         if (!pdmNumValue) {
             pdmTextInput.value = '';
@@ -86,8 +128,8 @@ function syncPDMText() {
         let found = false;
         for (let j = 0; j < pdmRows.length; j++) {
             const pdmRow = pdmRows[j];
-            const pdmNumSource = pdmRow.cells[0].querySelector('input').value.trim();
-            const pdmTextSource = pdmRow.cells[2].querySelector('input').value;
+            const pdmNumSource = pdmRow.cells[0]?.querySelector('input')?.value?.trim() || '';
+            const pdmTextSource = pdmRow.cells[2]?.querySelector('input')?.value || '';
 
             if (pdmNumValue.toLowerCase() === pdmNumSource.toLowerCase()) {
                 pdmTextInput.value = pdmTextSource;
@@ -108,100 +150,121 @@ function generateDetails() {
     alert('Details generated successfully!');
 }
 
-function addRow(tableId) {
-    const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-    const newRow = table.insertRow();
+function addRow(tableId, count = 1) {
+    const table = tableCache[tableId]?.getElementsByTagName('tbody')[0];
+    if (!table) return;
 
+    const fragment = document.createDocumentFragment();
     let columns;
-    if (tableId === 'dataTable') {
+
+    if (tableId === 'dataTable' || tableId === 'pulldataBackupTable') {
         columns = ['headingName', 'headingId', 'definition', 'family', 'pdmNum', 'link', 'hos', 'updatedBy'];
-    } else if (tableId === 'dataTablePDM') {
+    } else if (tableId === 'dataTablePDM' || tableId === 'pulldataBackupTablePDM') {
         columns = ['pdmNum', 'summary', 'pdmText', 'headingCount', 'date', 'updatedBy'];
     } else if (tableId === 'classificationDetailsTable') {
         columns = ['headingId', 'headingName', 'family', 'link', 'pdmNum', 'pdmText', 'headingType'];
-    } else if (tableId === 'pulldataBackupTable') {
-        columns = ['headingName', 'headingId', 'definition', 'family', 'pdmNum', 'link', 'hos', 'updatedBy'];
     } else if (tableId === 'toolTable') {
         columns = ['input', 'output'];
     }
 
-    columns.forEach(col => {
-        const newCell = newRow.insertCell();
-        const input = document.createElement('input');
-        input.type = 'text';
-        if (tableId === 'toolTable') {
-            if (col === 'input') {
-                input.className = 'input-cell';
-            } else if (col === 'output') {
-                input.className = 'output-cell';
-                input.readOnly = true;
+    for (let i = 0; i < count; i++) {
+        const newRow = document.createElement('tr');
+        columns.forEach(col => {
+            const newCell = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'text';
+            if (tableId === 'toolTable') {
+                if (col === 'input') {
+                    input.className = 'input-cell';
+                } else if (col === 'output') {
+                    input.className = 'output-cell';
+                    input.readOnly = true;
+                }
             }
-        }
-        input.name = col;
-        newCell.appendChild(input);
-    });
+            input.name = col;
+            newCell.appendChild(input);
+            newRow.appendChild(newCell);
+        });
+        fragment.appendChild(newRow);
+    }
+
+    table.appendChild(fragment);
 }
 
-function addToolRow() {
-    const table = document.getElementById('toolTable').getElementsByTagName('tbody')[0];
-    const newRow = table.insertRow();
-    const inputCell = newRow.insertCell();
-    const outputCell = newRow.insertCell();
-    
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'input-cell';
-    input.name = `input${table.rows.length}`;
-    inputCell.appendChild(input);
-    
-    const output = document.createElement('input');
-    output.type = 'text';
-    output.className = 'output-cell';
-    output.readOnly = true;
-    outputCell.appendChild(output);
+function addToolRow(count = 1) {
+    const table = tableCache.toolTable?.getElementsByTagName('tbody')[0];
+    if (!table) return;
+
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < count; i++) {
+        const newRow = document.createElement('tr');
+        const inputCell = document.createElement('td');
+        const outputCell = document.createElement('td');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'input-cell';
+        input.name = `input${table.rows.length + i}`;
+        inputCell.appendChild(input);
+
+        const output = document.createElement('input');
+        output.type = 'text';
+        output.className = 'output-cell';
+        output.readOnly = true;
+        outputCell.appendChild(output);
+
+        newRow.appendChild(inputCell);
+        newRow.appendChild(outputCell);
+        fragment.appendChild(newRow);
+    }
+
+    table.appendChild(fragment);
 }
 
 function clearSheet(tableId, rowCount = 20) {
-    const table = document.getElementById(tableId);
+    const table = tableCache[tableId];
     if (!table) {
         console.error(`Table with ID ${tableId} not found.`);
         return;
     }
-    if (!confirm('Are you sure you want to clear the table? This action cannot be undone.')) {
-        return;
-    }
     const tbody = table.getElementsByTagName('tbody')[0];
     const originalClasses = tbody.className;
+
+    // Remove existing paste event listener
+    if (pasteListeners[tableId]) {
+        table.removeEventListener('paste', pasteListeners[tableId]);
+        delete pasteListeners[tableId];
+    }
+
     tbody.innerHTML = '';
     tbody.className = originalClasses;
-    const rowsToAdd = [];
-    for (let i = 0; i < rowCount; i++) {
-        if (tableId === 'toolTable') {
-            rowsToAdd.push(() => addToolRow());
-        } else {
-            rowsToAdd.push(() => addRow(tableId));
-        }
+
+    // Add rows in bulk
+    if (tableId === 'toolTable') {
+        addToolRow(rowCount);
+    } else {
+        addRow(tableId, rowCount);
     }
-    rowsToAdd.forEach(add => add());
+
+    // Reattach paste event listener
+    const pasteHandler = (event) => handlePaste(event, tableId);
+    table.addEventListener('paste', pasteHandler);
+    pasteListeners[tableId] = pasteHandler;
+
     alert(`Table ${tableId} has been cleared and reinitialized with ${rowCount} rows.`);
 }
 
 function exportToCSV(tableId) {
-    const table = document.getElementById(tableId);
+    const table = tableCache[tableId];
+    if (!table) return;
     const rows = table.querySelectorAll('tbody tr');
     const csv = [];
+    const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
+    csv.push(headers.join(','));
     rows.forEach(row => {
         const rowData = [];
-        if (tableId === 'tools') {
-            const input = row.querySelector('.input-cell').value;
-            const output = row.querySelector('.output-cell').value;
-            rowData.push(input || '');
-            rowData.push(output || '');
-        } else if (tableId === 'pulldataBackupTable') {
-            row.querySelectorAll('input').forEach(input => rowData.push(input.value));
-        } else {
-            row.querySelectorAll('input').forEach(input => rowData.push(input.value));
-        }
+        row.querySelectorAll('input').forEach(input => rowData.push(input.value || ''));
         csv.push(rowData.join(','));
     });
     const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
@@ -211,35 +274,132 @@ function exportToCSV(tableId) {
     link.setAttribute('download', `${tableId}.csv`);
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+}
+
+function exportCombinedCSV() {
+    const pdmTable = tableCache.dataTablePDM;
+    const scraperTable = tableCache.dataTable;
+    if (!pdmTable || !scraperTable) return;
+
+    const pdmHeaders = Array.from(pdmTable.querySelectorAll('thead th')).map(th => th.textContent);
+    const scraperHeaders = Array.from(scraperTable.querySelectorAll('thead th')).map(th => th.textContent);
+    const combinedHeaders = pdmHeaders.concat(scraperHeaders);
+
+    const pdmRows = pdmTable.querySelectorAll('tbody tr');
+    const scraperRows = scraperTable.querySelectorAll('tbody tr');
+    const maxRows = Math.max(pdmRows.length, scraperRows.length);
+
+    const csv = [combinedHeaders.join(',')];
+
+    for (let i = 0; i < maxRows; i++) {
+        const pdmRowData = [];
+        const scraperRowData = [];
+
+        if (i < pdmRows.length) {
+            pdmRows[i].querySelectorAll('input').forEach(input => pdmRowData.push(input.value || ''));
+        } else {
+            pdmHeaders.forEach(() => pdmRowData.push(''));
+        }
+
+        if (i < scraperRows.length) {
+            scraperRows[i].querySelectorAll('input').forEach(input => scraperRowData.push(input.value || ''));
+        } else {
+            scraperHeaders.forEach(() => scraperRowData.push(''));
+        }
+
+        const combinedRow = pdmRowData.concat(scraperRowData);
+        csv.push(combinedRow.join(','));
+    }
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'scraperDataAfterwork_combined.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function exportCombinedCSVBackup() {
+    const pdmTable = tableCache.pulldataBackupTablePDM;
+    const scraperTable = tableCache.pulldataBackupTable;
+    if (!pdmTable || !scraperTable) return;
+
+    const pdmHeaders = Array.from(pdmTable.querySelectorAll('thead th')).map(th => th.textContent);
+    const scraperHeaders = Array.from(scraperTable.querySelectorAll('thead th')).map(th => th.textContent);
+    const combinedHeaders = pdmHeaders.concat(scraperHeaders);
+
+    const pdmRows = pdmTable.querySelectorAll('tbody tr');
+    const scraperRows = scraperTable.querySelectorAll('tbody tr');
+    const maxRows = Math.max(pdmRows.length, scraperRows.length);
+
+    const csv = [combinedHeaders.join(',')];
+
+    for (let i = 0; i < maxRows; i++) {
+        const pdmRowData = [];
+        const scraperRowData = [];
+
+        if (i < pdmRows.length) {
+            pdmRows[i].querySelectorAll('input').forEach(input => pdmRowData.push(input.value || ''));
+        } else {
+            pdmHeaders.forEach(() => pdmRowData.push(''));
+        }
+
+        if (i < scraperRows.length) {
+            scraperRows[i].querySelectorAll('input').forEach(input => scraperRowData.push(input.value || ''));
+        } else {
+            scraperHeaders.forEach(() => scraperRowData.push(''));
+        }
+
+        const combinedRow = pdmRowData.concat(scraperRowData);
+        csv.push(combinedRow.join(','));
+    }
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'scraperDataBackup_combined.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 function handlePaste(event, tableId) {
-    const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
+    const table = tableCache[tableId]?.getElementsByTagName('tbody')[0];
+    if (!table) return;
+
     const clipboardData = event.clipboardData || window.clipboardData;
     const pastedData = clipboardData.getData('text');
 
-    let rows;
-    if (['pulldataBackupTable', 'dataTablePDM', 'dataTable', 'classificationDetailsTable', 'toolTable'].includes(tableId)) {
-        rows = pastedData.split('\n').map(row => row.split('\t'));
-    } else {
-        rows = pastedData.split('\n').map(row => row.split('\t')).slice(0, 20);
-    }
+    let rows = pastedData.split('\n').map(row => row.split('\t'));
 
     const startCell = event.target.closest('td');
-    const startRow = startCell.parentElement;
+    const startRow = startCell?.parentElement;
+    if (!startRow) return;
+
     const startRowIndex = Array.from(startRow.parentElement.children).indexOf(startRow);
     const startCellIndex = Array.from(startRow.children).indexOf(startCell);
 
+    const fragment = document.createDocumentFragment();
+    let rowsToAdd = 0;
+
     rows.forEach((row, rowIndex) => {
-        let currentRow = table.rows[startRowIndex + rowIndex];
-        if (!currentRow) {
-            if (tableId === 'toolTable') {
-                addToolRow();
-            } else {
-                addRow(tableId);
-            }
-            currentRow = table.rows[startRowIndex + rowIndex];
+        if (!table.rows[startRowIndex + rowIndex]) {
+            rowsToAdd++;
         }
+    });
+
+    if (tableId === 'toolTable') {
+        addToolRow(rowsToAdd);
+    } else {
+        addRow(tableId, rowsToAdd);
+    }
+
+    rows.forEach((row, rowIndex) => {
+        const currentRow = table.rows[startRowIndex + rowIndex];
         row.forEach((cellData, cellIndex) => {
             const currentCell = currentRow.cells[startCellIndex + cellIndex];
             if (currentCell) {
@@ -253,12 +413,6 @@ function handlePaste(event, tableId) {
 
     event.preventDefault();
 }
-
-document.getElementById('dataTable').addEventListener('paste', (event) => handlePaste(event, 'dataTable'));
-document.getElementById('dataTablePDM').addEventListener('paste', (event) => handlePaste(event, 'dataTablePDM'));
-document.getElementById('classificationDetailsTable').addEventListener('paste', (event) => handlePaste(event, 'classificationDetailsTable'));
-document.getElementById('toolTable').addEventListener('paste', (event) => handlePaste(event, 'toolTable'));
-document.getElementById('pulldataBackupTable').addEventListener('paste', (event) => handlePaste(event, 'pulldataBackupTable'));
 
 function showSheet(sheetId) {
     const sheets = document.querySelectorAll('.blank-sheet');
@@ -280,16 +434,43 @@ function showSheet(sheetId) {
 }
 
 function initializeTable() {
-    ['dataTable', 'dataTablePDM', 'classificationDetailsTable', 'pulldataBackupTable', 'toolTable'].forEach(tableId => {
-        const table = document.getElementById(tableId).getElementsByTagName('tbody')[0];
-        for (let i = 0; i < 20; i++) {
+    const tableIds = ['dataTable', 'dataTablePDM', 'classificationDetailsTable', 'pulldataBackupTable', 'pulldataBackupTablePDM', 'toolTable'];
+    tableIds.forEach(tableId => {
+        if (tableCache[tableId]) {
             if (tableId === 'toolTable') {
-                addToolRow();
+                addToolRow(20);
             } else {
-                addRow(tableId);
+                addRow(tableId, 20);
             }
+            const pasteHandler = (event) => handlePaste(event, tableId);
+            tableCache[tableId].addEventListener('paste', pasteHandler);
+            pasteListeners[tableId] = pasteHandler;
         }
     });
+}
+
+function toggleTable(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const tableContainer = container.querySelector('.table-container');
+    const toggleIcon = container.querySelector('.toggle-icon');
+
+    if (tableContainer.style.maxHeight) {
+        tableContainer.style.maxHeight = null;
+        tableContainer.style.opacity = '1';
+        toggleIcon.classList.remove('collapsed');
+    } else {
+        tableContainer.style.maxHeight = '0';
+        tableContainer.style.opacity = '0';
+        toggleIcon.classList.add('collapsed');
+    }
+}
+
+function navigateToOtherTable(currentContainerId, targetContainerId) {
+    const targetContainer = document.getElementById(targetContainerId);
+    if (targetContainer) {
+        targetContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 function setActiveToolButton(button) {
@@ -301,13 +482,13 @@ function setActiveToolButton(button) {
 function spacingCheck() {
     const button = document.querySelector('button[onclick="spacingCheck()"]');
     setActiveToolButton(button);
-    const rows = document.querySelectorAll('#toolTable tbody tr');
+    const rows = tableCache.toolTable?.querySelectorAll('tbody tr') || [];
     const whitespaceRegex = /\s{2,}|\t|\n/;
 
     rows.forEach(row => {
         const input = row.querySelector('.input-cell');
         const outputCell = row.querySelector('.output-cell');
-        const value = input.value;
+        const value = input?.value || '';
         let output = '';
 
         if (!value) {
@@ -347,12 +528,12 @@ function spacingCheck() {
 function removeSpace() {
     const button = document.querySelector('button[onclick="removeSpace()"]');
     setActiveToolButton(button);
-    const rows = document.querySelectorAll('#toolTable tbody tr');
+    const rows = tableCache.toolTable?.querySelectorAll('tbody tr') || [];
     rows.forEach(row => {
         const input = row.querySelector('.input-cell');
         const outputCell = row.querySelector('.output-cell');
-        const value = input.value.trim().replace(/\s+/g, ' ');
-        outputCell.value = value || '';
+        const value = input?.value?.trim().replace(/\s+/g, ' ') || '';
+        outputCell.value = value;
         input.value = value;
     });
 }
@@ -360,11 +541,11 @@ function removeSpace() {
 function wordCounter() {
     const button = document.querySelector('button[onclick="wordCounter()"]');
     setActiveToolButton(button);
-    const rows = document.querySelectorAll('#toolTable tbody tr');
+    const rows = tableCache.toolTable?.querySelectorAll('tbody tr') || [];
     rows.forEach(row => {
         const input = row.querySelector('.input-cell');
         const outputCell = row.querySelector('.output-cell');
-        const value = input.value.trim();
+        const value = input?.value?.trim() || '';
         let output = '';
         if (value) {
             const words = value.split(/\s+/).filter(word => word.length > 0);
@@ -375,7 +556,7 @@ function wordCounter() {
 }
 
 function clearToolData() {
-    const rows = document.querySelectorAll('#toolTable tbody tr');
+    const rows = tableCache.toolTable?.querySelectorAll('tbody tr') || [];
     rows.forEach(row => {
         const input = row.querySelector('.input-cell');
         const outputCell = row.querySelector('.output-cell');
@@ -389,13 +570,13 @@ function clearToolData() {
 async function linkCheck() {
     const button = document.querySelector('button[onclick="linkCheck()"]');
     setActiveToolButton(button);
-    const rows = document.querySelectorAll('#toolTable tbody tr');
+    const rows = tableCache.toolTable?.querySelectorAll('tbody tr') || [];
     const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/i;
 
     for (const row of rows) {
         const input = row.querySelector('.input-cell');
         const outputCell = row.querySelector('.output-cell');
-        const value = input.value.trim();
+        const value = input?.value?.trim() || '';
         let output = '';
 
         if (!value) {
@@ -445,13 +626,13 @@ async function linkCheck() {
 function duplicatePDM() {
     const button = document.querySelector('button[onclick="duplicatePDM()"]');
     setActiveToolButton(button);
-    const rows = document.querySelectorAll('#toolTable tbody tr');
-    const values = Array.from(rows).map(row => row.querySelector('.input-cell').value.trim().toLowerCase());
+    const rows = tableCache.toolTable?.querySelectorAll('tbody tr') || [];
+    const values = Array.from(rows).map(row => row.querySelector('.input-cell')?.value?.trim().toLowerCase() || '');
     const duplicates = values.filter((item, index) => values.indexOf(item) !== index && item);
     rows.forEach(row => {
         const input = row.querySelector('.input-cell');
         const outputCell = row.querySelector('.output-cell');
-        const value = input.value.trim();
+        const value = input?.value?.trim() || '';
         let output = '';
         if (duplicates.includes(value.toLowerCase()) && value) {
             output = 'Duplicate PDM found!';
@@ -475,9 +656,18 @@ window.onload = function() {
     initializeTable();
     updateDateTime();
     setInterval(updateDateTime, 1000);
-    
+
     const defaultContent = document.getElementById('defaultContent');
     if (defaultContent) {
         defaultContent.style.display = 'flex';
+    }
+};
+
+// Cleanup event listeners on page unload
+window.onbeforeunload = function() {
+    for (const tableId in pasteListeners) {
+        if (pasteListeners[tableId] && tableCache[tableId]) {
+            tableCache[tableId].removeEventListener('paste', pasteListeners[tableId]);
+        }
     }
 };
