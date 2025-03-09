@@ -103,8 +103,8 @@ function syncPDMText() {
 }
 
 function generateDetails() {
-    syncToClassificationDetails(); // Run first
-    syncPDMText(); // Run second
+    syncToClassificationDetails();
+    syncPDMText();
     alert('Details generated successfully!');
 }
 
@@ -292,7 +292,15 @@ function initializeTable() {
     });
 }
 
+function setActiveToolButton(button) {
+    const buttons = document.querySelectorAll('.tool-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+}
+
 function spacingCheck() {
+    const button = document.querySelector('button[onclick="spacingCheck()"]');
+    setActiveToolButton(button);
     const rows = document.querySelectorAll('#toolTable tbody tr');
     const whitespaceRegex = /\s{2,}|\t|\n/;
 
@@ -337,6 +345,8 @@ function spacingCheck() {
 }
 
 function removeSpace() {
+    const button = document.querySelector('button[onclick="removeSpace()"]');
+    setActiveToolButton(button);
     const rows = document.querySelectorAll('#toolTable tbody tr');
     rows.forEach(row => {
         const input = row.querySelector('.input-cell');
@@ -348,6 +358,8 @@ function removeSpace() {
 }
 
 function wordCounter() {
+    const button = document.querySelector('button[onclick="wordCounter()"]');
+    setActiveToolButton(button);
     const rows = document.querySelectorAll('#toolTable tbody tr');
     rows.forEach(row => {
         const input = row.querySelector('.input-cell');
@@ -370,9 +382,13 @@ function clearToolData() {
         input.value = '';
         outputCell.value = '';
     });
+    const buttons = document.querySelectorAll('.tool-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
 }
 
 async function linkCheck() {
+    const button = document.querySelector('button[onclick="linkCheck()"]');
+    setActiveToolButton(button);
     const rows = document.querySelectorAll('#toolTable tbody tr');
     const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/[a-zA-Z0-9-._~:/?#[\]@!$&'()*+,;=]*)?$/i;
 
@@ -427,6 +443,8 @@ async function linkCheck() {
 }
 
 function duplicatePDM() {
+    const button = document.querySelector('button[onclick="duplicatePDM()"]');
+    setActiveToolButton(button);
     const rows = document.querySelectorAll('#toolTable tbody tr');
     const values = Array.from(rows).map(row => row.querySelector('.input-cell').value.trim().toLowerCase());
     const duplicates = values.filter((item, index) => values.indexOf(item) !== index && item);
@@ -450,12 +468,7 @@ function updateDateTime() {
         dateStyle: 'medium',
         timeStyle: 'medium'
     });
-    document.getElementById('dateTimeScraperData').textContent = dateTimeString;
-    document.getElementById('dateTimeScraperPDM').textContent = dateTimeString;
-    document.getElementById('dateTimeClassification').textContent = dateTimeString;
-    document.getElementById('dateTimeQCReport').textContent = dateTimeString;
-    document.getElementById('dateTimeTools').textContent = dateTimeString;
-    document.getElementById('dateTimeBackup').textContent = dateTimeString;
+    document.getElementById('dateTimeSidebar').textContent = dateTimeString;
 }
 
 window.onload = function() {
