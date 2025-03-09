@@ -133,6 +133,7 @@ body {
     background-color: #f9f9f9;
     border-bottom: 1px solid #ddd;
     border-radius: 8px 8px 0 0;
+    flex-wrap: wrap;
 }
 
 h1 {
@@ -493,13 +494,13 @@ input[type="text"]:focus {
 .toolbar {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 8px;
-    padding: 6px 16px; /* Reduced from 8px to 6px top/bottom */
-    background-color: #f5f5f5;
-    border: 1px solid #ddd; /* Full border instead of just bottom */
-    border-radius: 8px; /* Added for rounded corners */
+    padding: 0;
+    background-color: transparent;
+    border: none;
     align-items: center;
+    width: auto;
 }
 
 .tool-btn-group {
@@ -595,4 +596,26 @@ input[type="text"]:focus {
     to {
         opacity: 1;
     }
+}
+
+.disclaimer-box {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 2px solid #4A5A6A; /* Matte color retained */
+    border-radius: 8px;
+    padding: 15px;
+    max-width: 80%;
+    opacity: 0;
+    animation: fadeIn 2s ease-in-out 1s forwards;
+}
+
+.disclaimer-text {
+    font-size: 16px;
+    font-family: 'Calibri', Arial, sans-serif;
+    color: #555;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap;
 }
