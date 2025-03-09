@@ -14,15 +14,13 @@
             <div class="header">
                 <button onclick="showSheet('defaultContent')"><i class="fas fa-home"></i> Home</button>
             </div>
-            <button onclick="showSheet('pulldataBackup')"><i class="fas fa-archive"></i> Pulldata (Backup)</button>
-            <button onclick="showSheet('scraperDataPDM')"><i class="fas fa-database"></i> Scraper Data (PDM)</button>
-            <button onclick="showSheet('scraperData')"><i class="fas fa-database"></i> Scraper Data (Classification)</button>
+            <button onclick="showSheet('scraperDataBackup')"><i class="fas fa-archive"></i> Scraper Data (Backup)</button>
+            <button onclick="showSheet('scraperDataAfterwork')"><i class="fas fa-database"></i> Scraper Data (Afterwork)</button>
             <button onclick="showSheet('classificationDetails')"><i class="fas fa-list"></i> Classification Details</button>
             <button onclick="showSheet('qcReport')"><i class="fas fa-file-alt"></i> QC Report</button>
             <button onclick="showSheet('tools')"><i class="fas fa-tools"></i> Tools</button>
         </div>
         <div class="footer">
-            <!-- Added date-time here, just above the footer header -->
             <div class="date-time" id="dateTimeSidebar"></div>
             <div class="header">Quality Control Tool</div>
         </div>
@@ -34,54 +32,82 @@
             <h2 class="animated-text">Technosoft Engineering</h2>
         </div>
 
-        <div id="scraperData" class="blank-sheet">
+        <!-- Scraper Data (Afterwork) with both tables -->
+        <div id="scraperDataAfterwork" class="blank-sheet">
             <div class="header-container">
-                <h1>Scraper Data (Classification)</h1>
+                <h1>Scraper Data (Afterwork)</h1>
                 <div class="header-right">
-                    <button class="clear-btn" onclick="clearSheet('dataTable')">Clear Data</button>
-                    <button class="export-btn" onclick="exportToCSV('dataTable')">Export to CSV</button>
-                    <!-- Removed date-time -->
+                    <button class="export-btn" onclick="exportCombinedCSV()">Export to CSV</button>
                 </div>
             </div>
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th>Heading Name</th>
-                        <th>Heading id</th>
-                        <th>Definition</th>
-                        <th>Family</th>
-                        <th>PDM NUM</th>
-                        <th>Link</th>
-                        <th>HOS</th>
-                        <th>Updated By</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-
-        <div id="scraperDataPDM" class="blank-sheet">
-            <div class="header-container">
-                <h1>Scraper Data (PDM)</h1>
-                <div class="header-right">
-                    <button class="clear-btn" onclick="clearSheet('dataTablePDM')">Clear Data</button>
-                    <button class="export-btn" onclick="exportToCSV('dataTablePDM')">Export to CSV</button>
-                    <!-- Removed date-time -->
+            <div class="table-section" id="pdmTableContainer">
+                <div class="table-header">
+                    <h2>PDM Data</h2>
+                    <div class="header-icons">
+                        <button class="clear-data-icon" onclick="clearSheet('dataTablePDM')">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="toggle-icon" onclick="toggleTable('pdmTableContainer')">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                        <button class="nav-icon" onclick="navigateToOtherTable('pdmTableContainer', 'classificationTableContainer')">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="dataTablePDM">
+                        <thead>
+                            <tr>
+                                <th>PDM NUM</th>
+                                <th>Summary</th>
+                                <th>PDM Text</th>
+                                <th>Heading Count</th>
+                                <th>Date</th>
+                                <th>Updated BY</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be added dynamically -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <table id="dataTablePDM">
-                <thead>
-                    <tr>
-                        <th>PDM NUM</th>
-                        <th>Summary</th>
-                        <th>PDM Text</th>
-                        <th>Heading Count</th>
-                        <th>Date</th>
-                        <th>Updated BY</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-section" id="classificationTableContainer">
+                <div class="table-header">
+                    <h2>Classification Data</h2>
+                    <div class="header-icons">
+                        <button class="clear-data-icon" onclick="clearSheet('dataTable')">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="toggle-icon" onclick="toggleTable('classificationTableContainer')">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                        <button class="nav-icon" onclick="navigateToOtherTable('classificationTableContainer', 'pdmTableContainer')">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>Heading Name</th>
+                                <th>Heading id</th>
+                                <th>Definition</th>
+                                <th>Family</th>
+                                <th>PDM NUM</th>
+                                <th>Link</th>
+                                <th>HOS</th>
+                                <th>Updated By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div id="classificationDetails" class="blank-sheet">
@@ -91,7 +117,6 @@
                     <button class="sync-btn" onclick="generateDetails()">Generate Details</button>
                     <button class="clear-btn" onclick="clearSheet('classificationDetailsTable')">Clear Data</button>
                     <button class="export-btn" onclick="exportToCSV('classificationDetailsTable')">Export to CSV</button>
-                    <!-- Removed date-time -->
                 </div>
             </div>
             <table id="classificationDetailsTable">
@@ -106,7 +131,9 @@
                         <th>Heading Type</th>
                     </tr>
                 </thead>
-                <tbody></tbody>
+                <tbody>
+                    <!-- Rows will be added dynamically -->
+                </tbody>
             </table>
         </div>
 
@@ -115,7 +142,6 @@
                 <h1>QC Report</h1>
                 <div class="header-right">
                     <button class="clear-btn" onclick="clearSheet('qcReport')">Clear Data</button>
-                    <!-- Removed date-time -->
                 </div>
             </div>
         </div>
@@ -130,8 +156,7 @@
                     <button class="tool-btn" onclick="linkCheck()" aria-label="Check if the input is a valid URL">Link Check</button>
                     <button class="tool-btn" onclick="duplicatePDM()" aria-label="Check for duplicate PDM values">Duplicate PDM</button>
                     <button class="tool-btn" onclick="clearToolData()" aria-label="Reset tool data">Reset</button>
-                    <button class="tool-btn" onclick="exportToCSV('tools')" aria-label="Export tool data to CSV">Export to CSV</button>
-                    <!-- Removed date-time -->
+                    <button class="export-btn" onclick="exportToCSV('tools')" aria-label="Export tool data to CSV">Export to CSV</button>
                 </div>
             </div>
             <div class="tools-container">
@@ -144,51 +169,89 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td><input type="text" class="input-cell" name="input1"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input2"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input3"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input4"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input5"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input6"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input7"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input8"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input9"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input10"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input11"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input12"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input13"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input14"></td><td><input type="text" class="output-cell" readonly></td></tr>
-                            <tr><td><input type="text" class="input-cell" name="input15"></td><td><input type="text" class="output-cell" readonly></td></tr>
+                            <!-- Rows will be added dynamically -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <div id="pulldataBackup" class="blank-sheet">
+        <!-- Scraper Data (Backup) made identical to Scraper Data (Afterwork) -->
+        <div id="scraperDataBackup" class="blank-sheet">
             <div class="header-container">
-                <h1>Pulldata (Backup)</h1>
+                <h1>Scraper Data (Backup)</h1>
                 <div class="header-right">
-                    <button class="clear-btn" onclick="clearSheet('pulldataBackupTable')">Clear Data</button>
-                    <button class="export-btn" onclick="exportToCSV('pulldataBackupTable')">Export to CSV</button>
-                    <!-- Removed date-time -->
+                    <button class="export-btn" onclick="exportCombinedCSVBackup()">Export to CSV</button>
                 </div>
             </div>
-            <table id="pulldataBackupTable">
-                <thead>
-                    <tr>
-                        <th>Heading Name</th>
-                        <th>Heading id</th>
-                        <th>Definition</th>
-                        <th>Family</th>
-                        <th>PDM NUM</th>
-                        <th>Link</th>
-                        <th>HOS</th>
-                        <th>Updated By</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+            <div class="table-section" id="pdmTableContainerBackup">
+                <div class="table-header">
+                    <h2>PDM Data</h2>
+                    <div class="header-icons">
+                        <button class="clear-data-icon" onclick="clearSheet('pulldataBackupTablePDM')">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="toggle-icon" onclick="toggleTable('pdmTableContainerBackup')">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                        <button class="nav-icon" onclick="navigateToOtherTable('pdmTableContainerBackup', 'classificationTableContainerBackup')">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="pulldataBackupTablePDM">
+                        <thead>
+                            <tr>
+                                <th>PDM NUM</th>
+                                <th>Summary</th>
+                                <th>PDM Text</th>
+                                <th>Heading Count</th>
+                                <th>Date</th>
+                                <th>Updated BY</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="table-section" id="classificationTableContainerBackup">
+                <div class="table-header">
+                    <h2>Classification Data</h2>
+                    <div class="header-icons">
+                        <button class="clear-data-icon" onclick="clearSheet('pulldataBackupTable')">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="toggle-icon" onclick="toggleTable('classificationTableContainerBackup')">
+                            <i class="fas fa-chevron-up"></i>
+                        </button>
+                        <button class="nav-icon" onclick="navigateToOtherTable('classificationTableContainerBackup', 'pdmTableContainerBackup')">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="pulldataBackupTable">
+                        <thead>
+                            <tr>
+                                <th>Heading Name</th>
+                                <th>Heading id</th>
+                                <th>Definition</th>
+                                <th>Family</th>
+                                <th>PDM NUM</th>
+                                <th>Link</th>
+                                <th>HOS</th>
+                                <th>Updated By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows will be added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
