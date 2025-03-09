@@ -663,7 +663,7 @@ window.onload = function() {
     }
 };
 
-// Cleanup event listeners on page unload
+// Cleanup event listeners on page unloaded
 window.onbeforeunload = function() {
     for (const tableId in pasteListeners) {
         if (pasteListeners[tableId] && tableCache[tableId]) {
