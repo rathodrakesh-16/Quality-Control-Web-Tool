@@ -37,7 +37,7 @@
             <div class="header-container">
                 <h1>Scraper Data (Afterwork)</h1>
                 <div class="header-right">
-                    <button class="export-btn" onclick="exportCombinedCSV()">Export to CSV</button>
+                    <button class="export-btn" onclick="exportCombinedCSV()" aria-label="Export to CSV"><i class="fas fa-file-export"></i></button>
                 </div>
             </div>
             <div class="table-section" id="pdmTableContainer">
@@ -114,9 +114,9 @@
             <div class="header-container">
                 <h1>Classification Details</h1>
                 <div class="header-right">
-                    <button class="sync-btn" onclick="generateDetails()">Generate Details</button>
-                    <button class="clear-btn" onclick="clearSheet('classificationDetailsTable')">Clear Data</button>
-                    <button class="export-btn" onclick="exportToCSV('classificationDetailsTable')">Export to CSV</button>
+                    <button class="sync-btn" onclick="generateDetails()" aria-label="Generate Details"><i class="fas fa-sync-alt"></i></button>
+                    <button class="clear-btn" onclick="clearSheet('classificationDetailsTable')" aria-label="Clear Data"><i class="fas fa-trash-alt"></i></button>
+                    <button class="export-btn" onclick="exportToCSV('classificationDetailsTable')" aria-label="Export to CSV"><i class="fas fa-file-export"></i></button>
                 </div>
             </div>
             <table id="classificationDetailsTable">
@@ -141,22 +141,26 @@
             <div class="header-container">
                 <h1>QC Report</h1>
                 <div class="header-right">
-                    <button class="clear-btn" onclick="clearSheet('qcReport')">Clear Data</button>
+                    <button class="clear-btn" onclick="clearSheet('qcReport')" aria-label="Clear Data"><i class="fas fa-trash-alt"></i></button>
                 </div>
             </div>
         </div>
 
         <div id="tools" class="blank-sheet">
             <div class="header-container">
-                <h1>Tools</h1>
-                <div class="header-right">
-                    <button class="tool-btn" onclick="spacingCheck()" aria-label="Check for spacing issues">Spacing Check</button>
-                    <button class="tool-btn" onclick="removeSpace()" aria-label="Remove extra spaces">Remove Space</button>
-                    <button class="tool-btn" onclick="wordCounter()" aria-label="Count words in the input">Word Counter</button>
-                    <button class="tool-btn" onclick="linkCheck()" aria-label="Check if the input is a valid URL">Link Check</button>
-                    <button class="tool-btn" onclick="duplicatePDM()" aria-label="Check for duplicate PDM values">Duplicate PDM</button>
-                    <button class="tool-btn" onclick="clearToolData()" aria-label="Reset tool data">Reset</button>
-                    <button class="export-btn" onclick="exportToCSV('tools')" aria-label="Export tool data to CSV">Export to CSV</button>
+                <!-- Empty -->
+            </div>
+            <div class="toolbar">
+                <div class="tool-btn-group">
+                    <button class="tool-btn" onclick="spacingCheck()" aria-label="Check for spacing issues"><i class="fas fa-align-left"></i> Spacing Check</button>
+                    <button class="tool-btn" onclick="removeSpace()" aria-label="Remove extra spaces"><i class="fas fa-compress-alt"></i> Remove Space</button>
+                    <button class="tool-btn" onclick="wordCounter()" aria-label="Count words in the input"><i class="fas fa-sort-numeric-up"></i> Word Counter</button>
+                    <button class="tool-btn" onclick="linkCheck()" aria-label="Check if the input is a valid URL"><i class="fas fa-link"></i> Link Check</button>
+                    <button class="tool-btn" onclick="duplicatePDM()" aria-label="Check for duplicate PDM values"><i class="fas fa-clone"></i> Duplicate PDM</button>
+                </div>
+                <div class="toolbar-right">
+                    <button class="clear-btn" onclick="clearSheet('toolTable')" aria-label="Clear Data"><i class="fas fa-trash-alt"></i></button>
+                    <button class="export-btn" onclick="exportToCSV('toolTable')" aria-label="Export to CSV"><i class="fas fa-file-export"></i></button>
                 </div>
             </div>
             <div class="tools-container">
@@ -181,7 +185,7 @@
             <div class="header-container">
                 <h1>Scraper Data (Backup)</h1>
                 <div class="header-right">
-                    <button class="export-btn" onclick="exportCombinedCSVBackup()">Export to CSV</button>
+                    <button class="export-btn" onclick="exportCombinedCSVBackup()" aria-label="Export to CSV"><i class="fas fa-file-export"></i></button>
                 </div>
             </div>
             <div class="table-section" id="pdmTableContainerBackup">
