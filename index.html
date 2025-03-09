@@ -22,6 +22,8 @@
             <button onclick="showSheet('tools')"><i class="fas fa-tools"></i> Tools</button>
         </div>
         <div class="footer">
+            <!-- Added date-time here, just above the footer header -->
+            <div class="date-time" id="dateTimeSidebar"></div>
             <div class="header">Quality Control Tool</div>
         </div>
     </div>
@@ -38,7 +40,7 @@
                 <div class="header-right">
                     <button class="clear-btn" onclick="clearSheet('dataTable')">Clear Data</button>
                     <button class="export-btn" onclick="exportToCSV('dataTable')">Export to CSV</button>
-                    <div class="date-time" id="dateTimeScraperData"></div>
+                    <!-- Removed date-time -->
                 </div>
             </div>
             <table id="dataTable">
@@ -64,7 +66,7 @@
                 <div class="header-right">
                     <button class="clear-btn" onclick="clearSheet('dataTablePDM')">Clear Data</button>
                     <button class="export-btn" onclick="exportToCSV('dataTablePDM')">Export to CSV</button>
-                    <div class="date-time" id="dateTimeScraperPDM"></div>
+                    <!-- Removed date-time -->
                 </div>
             </div>
             <table id="dataTablePDM">
@@ -89,7 +91,7 @@
                     <button class="sync-btn" onclick="generateDetails()">Generate Details</button>
                     <button class="clear-btn" onclick="clearSheet('classificationDetailsTable')">Clear Data</button>
                     <button class="export-btn" onclick="exportToCSV('classificationDetailsTable')">Export to CSV</button>
-                    <div class="date-time" id="dateTimeClassification"></div>
+                    <!-- Removed date-time -->
                 </div>
             </div>
             <table id="classificationDetailsTable">
@@ -113,7 +115,7 @@
                 <h1>QC Report</h1>
                 <div class="header-right">
                     <button class="clear-btn" onclick="clearSheet('qcReport')">Clear Data</button>
-                    <div class="date-time" id="dateTimeQCReport"></div>
+                    <!-- Removed date-time -->
                 </div>
             </div>
         </div>
@@ -122,8 +124,14 @@
             <div class="header-container">
                 <h1>Tools</h1>
                 <div class="header-right">
-                    <button class="export-btn" onclick="exportToCSV('tools')">Export to CSV</button>
-                    <div class="date-time" id="dateTimeTools"></div>
+                    <button class="tool-btn" onclick="spacingCheck()" aria-label="Check for spacing issues">Spacing Check</button>
+                    <button class="tool-btn" onclick="removeSpace()" aria-label="Remove extra spaces">Remove Space</button>
+                    <button class="tool-btn" onclick="wordCounter()" aria-label="Count words in the input">Word Counter</button>
+                    <button class="tool-btn" onclick="linkCheck()" aria-label="Check if the input is a valid URL">Link Check</button>
+                    <button class="tool-btn" onclick="duplicatePDM()" aria-label="Check for duplicate PDM values">Duplicate PDM</button>
+                    <button class="tool-btn" onclick="clearToolData()" aria-label="Reset tool data">Reset</button>
+                    <button class="tool-btn" onclick="exportToCSV('tools')" aria-label="Export tool data to CSV">Export to CSV</button>
+                    <!-- Removed date-time -->
                 </div>
             </div>
             <div class="tools-container">
@@ -154,16 +162,6 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="tools-section buttons">
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <button class="tool-btn" onclick="spacingCheck()">Spacing Check</button>
-                        <button class="tool-btn" onclick="removeSpace()">Remove Space</button>
-                        <button class="tool-btn" onclick="wordCounter()">Word Counter</button>
-                        <button class="tool-btn" onclick="clearToolData()">Clear Data</button>
-                        <button class="tool-btn" onclick="linkCheck()">Link Check</button>
-                        <button class="tool-btn" onclick="duplicatePDM()">Duplicate PDM</button>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -173,7 +171,7 @@
                 <div class="header-right">
                     <button class="clear-btn" onclick="clearSheet('pulldataBackupTable')">Clear Data</button>
                     <button class="export-btn" onclick="exportToCSV('pulldataBackupTable')">Export to CSV</button>
-                    <div class="date-time" id="dateTimeBackup"></div>
+                    <!-- Removed date-time -->
                 </div>
             </div>
             <table id="pulldataBackupTable">
