@@ -106,6 +106,14 @@ body {
     align-items: center;
 }
 
+.sidebar .footer .date-time {
+    color: #ffffff;
+    font-size: 14px;
+    font-family: 'Calibri', sans-serif;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
 .main-content {
     flex: 1;
     padding: 20px;
@@ -209,14 +217,21 @@ input[type="text"]:focus {
     color: #ff0000;
 }
 
-.clear-btn, .export-btn {
+.clear-btn, .export-btn, .sync-btn, .tool-btn {
     padding: 5px 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 12px;
     font-family: 'Calibri', sans-serif;
-    transition: background-color 0.3s ease;
+    font-weight: 700;
+    text-transform: uppercase; /* Original rule */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Override uppercase for specific buttons */
+.clear-btn, .export-btn, .tool-btn {
+    text-transform: none; /* Changed to display sentence case as in HTML */
 }
 
 .clear-btn {
@@ -228,6 +243,11 @@ input[type="text"]:focus {
     background-color: #cc5555;
 }
 
+.clear-btn:focus {
+    outline: 2px solid #e66b6b;
+    outline-offset: 2px;
+}
+
 .export-btn {
     background-color: #1e6ba8;
     color: white;
@@ -237,20 +257,23 @@ input[type="text"]:focus {
     background-color: #1a5a8d;
 }
 
+.export-btn:focus {
+    outline: 2px solid #1e6ba8;
+    outline-offset: 2px;
+}
+
 .sync-btn {
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    font-family: 'Calibri', sans-serif;
     background-color: #4CAF50;
     color: white;
-    transition: background-color 0.3s ease;
 }
 
 .sync-btn:hover {
     background-color: #45a049;
+}
+
+.sync-btn:focus {
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
 }
 
 .blank-sheet {
@@ -265,17 +288,34 @@ input[type="text"]:focus {
 
 .tools-container {
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
+    flex-direction: column;
+    gap: 15px;
     margin-top: 20px;
 }
 
 .tools-section {
-    padding: 15px;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: white;
     min-width: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tools-section.buttons {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.tool-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
 .tools-section.input {
@@ -286,7 +326,7 @@ input[type="text"]:focus {
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 4px;
-    padding: 4px;
+    padding: 0;
     margin-bottom: 3px;
 }
 
@@ -294,7 +334,7 @@ input[type="text"]:focus {
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 4px;
-    padding: 4px;
+    padding: 0;
     margin-bottom: 3px;
 }
 
@@ -309,35 +349,35 @@ input[type="text"]:focus {
     line-height: 12px;
 }
 
-.tools-section.buttons {
-    flex: 0.5;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 15px;
-}
-
 .tool-btn {
-    display: block;
-    margin: 10px 0;
-    padding: 5px 10px;
-    width: 120px;
+    display: inline-block;
+    width: auto;
     height: 30px;
-    background-color: #1e6ba8;
-    color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    background-color: white;
+    color: #1a2634;
+    border: 0.5px solid #2d3b4e;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     font-family: 'Calibri', sans-serif;
-    font-weight: 700;
-    text-align: center;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 5px 15px;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .tool-btn:hover {
     background-color: #1a5a8d;
+}
+
+.tool-btn:focus {
+    outline: 2px solid #1e6ba8;
+    outline-offset: 2px;
+}
+
+.tool-btn.active {
+    background-color: #1e6ba8;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 #dataTable th:nth-child(1) { width: 150px; }
@@ -364,8 +404,8 @@ input[type="text"]:focus {
 #classificationDetailsTable th:nth-child(6) { width: 200px; }
 #classificationDetailsTable th:nth-child(7) { width: 100px; }
 
-#toolTable th:nth-child(1) { width: 60%; }
-#toolTable th:nth-child(2) { width: 48%; }
+#toolTable th:nth-child(1) { width: 70%; }
+#toolTable th:nth-child(2) { width: 30%; }
 
 #pulldataBackupTable th:nth-child(1) { width: 150px; }
 #pulldataBackupTable th:nth-child(2) { width: 100px; }
@@ -413,5 +453,33 @@ input[type="text"]:focus {
     }
     to {
         opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tools-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .tools-section.buttons {
+        width: 100%;
+        align-items: center;
+    }
+
+    .tool-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .tool-btn {
+        width: auto;
+        height: 30px;
+        padding: 5px 10px;
+        font-size: 12px;
+        white-space: nowrap;
     }
 }
